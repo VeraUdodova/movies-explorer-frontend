@@ -1,13 +1,6 @@
-import {Link, useNavigate, Routes, Route} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 function Header(props) {
-    const navigate = useNavigate();
-
-    function logOut() {
-        props.handleLogOut()
-        navigate('/signin', {replace: true})
-    }
-
     return (
         <header className="header">
             <div className="header__logo"></div>
