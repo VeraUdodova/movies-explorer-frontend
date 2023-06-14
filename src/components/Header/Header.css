@@ -1,0 +1,86 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 1140px;
+    height: 74px;
+}
+
+.header__logo {
+    background-image: url("../../images/logo.svg");
+    background-repeat: no-repeat;
+    height: 38px;
+    width: 38px;
+    background-size: 38px 38px;
+}
+
+.header__menu{
+    /*height: 18px;*/
+    display: flex;
+    justify-content: space-between;
+    column-gap: 16px;
+}
+
+.header__account__menu{
+    display: flex;
+    justify-content: space-between;
+    column-gap: 30px;
+}
+
+.header__button{
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 18px;
+    font-style: normal;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    height: 18px;
+    padding: 0;
+}
+
+.header__account{
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 12px;
+    font-style: normal;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    border-radius: 40px;
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+    padding: 0 0 0 11px;
+    width: 100px;
+    height: 32px;
+    text-align: left;
+
+    background-image: url("../../images/account-background.svg");
+    background-repeat: no-repeat;
+    background-position: right 3px center;
+}
+
+.header__link{
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    font-style: normal;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    height: 18px;
+    padding: 8px 0;
+    color: #000;
+}
+
+.header__link-login{
+    padding: 8px 20px;
+    background-color: #2BE080;
+    border-radius: 3px;
+}
