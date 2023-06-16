@@ -1,9 +1,9 @@
-.register{
+.auth{
     width: 396px;
     margin: 0 auto;
 }
 
-.register__top{
+.auth__top{
     height: 177px;
     display: flex;
     align-items: flex-end;
@@ -11,14 +11,14 @@
     flex-direction: column;
     row-gap: 40px;
 }
-.register__logo{
-    background-image: url("../../images/logo.svg");
+.auth__logo{
+    background-image: url("../images/logo.svg");
     background-repeat: no-repeat;
     height: 38px;
     width: 396px;
     background-size: 38px 38px;
 }
-.register__welcome{
+.auth__welcome{
     font-family: 'Inter', Arial, sans-serif;
     font-style: normal;
     font-weight: 500;
@@ -31,11 +31,11 @@
     margin: 0;
 }
 
-.register__form__container{
+.auth__form__container{
     height: 292px;
     padding-top: 36px;
 }
-.register__form-label{
+.auth__form-label{
     font-family: 'Inter', Arial, sans-serif;
     font-style: normal;
     font-weight: 400;
@@ -43,7 +43,7 @@
     line-height: 12px;
     color: #A0A0A0;
 }
-.register__form-input{
+.auth__form-input{
     font-family: 'Inter', Arial, sans-serif;
     margin: 0 0 19px 0;
     width: 396px;
@@ -53,16 +53,16 @@
     color: #000;
     background-color: transparent;
 }
-.register__form-input:focus{
+.auth__form-input:focus{
     outline: none;
     border-color: #2BE080;
 }
 
-.register__button-container{
+.auth__button-container{
     height: 217px;
     padding-top: 47px;
 }
-.register__button{
+.auth__button{
     width: 396px;
     height: 45px;
     margin-bottom: 17px;
@@ -78,7 +78,7 @@
     background-color: #2BE080;
     border: none;
 }
-.register__signin {
+.auth__signin {
     font-family: 'Inter', Arial, sans-serif;
     font-style: normal;
     font-weight: 400;
@@ -90,7 +90,7 @@
     justify-content: center;
     gap: 7px;
 }
-.register__login-link{
+.auth__auth-link{
     color: #2be080;
     text-decoration: none;
 }
