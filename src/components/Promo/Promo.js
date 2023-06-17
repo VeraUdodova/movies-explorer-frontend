@@ -4,7 +4,7 @@ const Promo = () => {
     return (
         <section className="promo">
             <div className="promo__container">
-                <p className="promo__title">Учебный проект студента<br/>факультета Веб-разработки.</p>
+                <h1 className="promo__title">Учебный проект студента<br/>факультета Веб-разработки.</h1>
             </div>
             <NavTab/>
         </section>
