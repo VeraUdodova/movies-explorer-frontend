@@ -75,8 +75,9 @@
 }
 
 .aboutme__photo {
-    background-image: url(../../images/photo.png);
+    background-image: url(../../images/photo.jpeg);
     width: 270px;
     height: 327px;
     border-radius: 10px;
+    background-position: 50%;
 }
