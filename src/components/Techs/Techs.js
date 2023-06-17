@@ -1,6 +1,6 @@
-const Techs = () => {
+const Techs = (props) => {
     return (
-        <section className="techs">
+        <section className="techs" id={props.anchor}>
             <h2 className="techs__title">О проекте</h2>
 
             <div className="techs__container">

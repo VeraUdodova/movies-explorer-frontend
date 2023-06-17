@@ -1,6 +1,6 @@
-const AboutProject = () => {
+const AboutProject = (props) => {
     return (
-        <section className="aboutproject">
+        <section className="aboutproject" id={props.anchor}>
             <h2 className="aboutproject__title">О проекте</h2>
 
             <div className="aboutproject__stages">
