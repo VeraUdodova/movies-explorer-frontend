@@ -12,7 +12,7 @@ function Navigation(props) {
                         <Link to="/movies" className={`navigation__link ${pathname === "/movies" ? "navigation__link-selected": ""}`}>Фильмы</Link>
                         <Link to="/saved-movies" className={`navigation__link ${pathname === "/saved-movies" ? "navigation__link-selected": ""}`}>Сохранённые фильмы</Link>
                     </div>
-                    <button className="navigation__account">Аккаунт</button>
+                    <Link to="/profile" className={`navigation__account ${pathname === "/profile" ? "navigation__link-selected": ""}`}>Аккаунт</Link>
                 </div>
                 :
                 <div className="navigation__account__menu">

@@ -4,7 +4,7 @@ import "./Footer.css";
 function Footer() {
     const { pathname } = useLocation();
 
-    if (['/signin', '/signup'].includes(pathname)) {
+    if (['/signin', '/signup', '/profile'].includes(pathname)) {
         return <></>;
     }
 
