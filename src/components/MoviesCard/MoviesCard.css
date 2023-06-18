@@ -1,0 +1,49 @@
+.moviecard {
+    width: 1140px;
+    height: 134px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0 0 40px;
+}
+
+.moviecard__info {
+    margin: 22px;
+    padding: 0;
+}
+
+.moviecard__name {
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+    margin: 0;
+    padding: 0;
+}
+.moviecard__duration {
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    color: #A0A0A0;
+    margin: 13px 0 0;
+    padding: 0;
+}
+.moviecard__like {
+    margin: 30px 0 0;
+    padding: 0;
+    width: 14px;
+    height: 12px;
+    background-image: url(../../images/dislike.svg);
+}
+.moviecard__like-liked{
+    background-image: url(../../images/like.svg);
+}
+.moviecard__thumbnail{
+    width: 220px;
+    height: 122px;
+    margin: auto 0;
+}
