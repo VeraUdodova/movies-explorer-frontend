@@ -1,3 +1,5 @@
+import "./Techs.css";
+
 const Techs = (props) => {
     return (
         <section className="techs" id={props.anchor}>

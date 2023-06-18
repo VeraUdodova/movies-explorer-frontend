@@ -1,4 +1,5 @@
 import NavTab from "../NavTab/NavTab";
+import "./Promo.css";
 
 const Promo = (props) => {
     return (

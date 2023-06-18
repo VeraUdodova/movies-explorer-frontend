@@ -1,3 +1,5 @@
+import "./AboutProject.css";
+
 const AboutProject = (props) => {
     return (
         <section className="aboutproject" id={props.anchor}>

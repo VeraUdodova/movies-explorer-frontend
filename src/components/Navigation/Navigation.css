@@ -1,0 +1,82 @@
+.navigation {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 0;
+    width: 100%;
+}
+
+.navigation__menu {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 16px;
+    position: absolute;
+    width: 212px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+}
+
+.navigation__account__menu {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 30px;
+}
+
+.navigation__button {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 18px;
+    font-style: normal;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    height: 18px;
+    padding: 0;
+}
+
+.navigation__account {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 12px;
+    font-style: normal;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    border-radius: 40px;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    padding: 0 0 0 11px;
+    width: 100px;
+    height: 32px;
+    text-align: left;
+
+    background-image: url("../../images/account.svg"), url("../../images/account-background.svg");
+    background-size: 12px 12px, 26px 26px;
+    background-repeat: no-repeat, no-repeat;
+    background-position: right 10px center, right 3px center;
+}
+
+.navigation__link {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    font-style: normal;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    height: 18px;
+    padding: 8px 0;
+    color: #000;
+}
+
+.navigation__link-login {
+    padding: 8px 20px;
+    background-color: #2BE080;
+    border-radius: 3px;
+}

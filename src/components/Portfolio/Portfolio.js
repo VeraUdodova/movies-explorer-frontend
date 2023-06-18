@@ -1,4 +1,5 @@
 import {Link} from "react-router-dom";
+import "./Portfolio.css";
 
 const Portfolio = () => {
     return (
