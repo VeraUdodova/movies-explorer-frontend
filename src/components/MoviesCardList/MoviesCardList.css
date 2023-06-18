@@ -1,6 +1,17 @@
-.movies{
+.movies {
     width: 1280px;
     box-sizing: border-box;
     padding: 70px 70px 0;
     margin: 0 auto;
+}
+
+.movies__zero {
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 27px;
+    margin: 0 auto 40px;
+    width: 100%;
+    text-align: center;
 }
