@@ -1,0 +1,37 @@
+.notfound{
+    width: 400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.notfound__title{
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 140px;
+    line-height: 169px;
+    padding: 0;
+    margin: 246px 0 5px;
+}
+.notfound__text{
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    padding: 0;
+    margin: 0 0 184px;
+}
+.notfound__link{
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 17px;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    color: #2BE080;
+    margin: 0 0 60px;
+}
