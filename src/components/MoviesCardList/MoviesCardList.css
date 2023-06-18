@@ -1,8 +1,11 @@
 .movies {
     width: 1280px;
     box-sizing: border-box;
-    padding: 70px 70px 0;
+    padding: 70px 70px 110px;
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .movies__zero {
@@ -14,4 +17,19 @@
     margin: 0 auto 40px;
     width: 100%;
     text-align: center;
+}
+
+.movies__more {
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    width: 320px;
+    height: 36px;
+    margin: 10px auto 0;
+    padding: 0;
+    border-radius: 10px;
+    border: 1px solid #E8E8E8;
+    background-color: white;
 }

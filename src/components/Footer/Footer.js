@@ -18,8 +18,20 @@ function Footer() {
                     &copy; 2023
                 </p>
                 <div className="footer__links">
-                    <Link to="https://practicum.yandex.ru" className="footer__link">Яндекс.Практикум</Link>
-                    <Link to="https://github.com/" className="footer__link">Github</Link>
+                    <Link
+                        to="https://practicum.yandex.ru"
+                        target="_blank"
+                        className="footer__link"
+                    >
+                        Яндекс.Практикум
+                    </Link>
+                    <Link
+                        to="https://github.com/"
+                        target="_blank"
+                        className="footer__link"
+                    >
+                        Github
+                    </Link>
                 </div>
             </div>
         </footer>

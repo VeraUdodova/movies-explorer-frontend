@@ -25,6 +25,7 @@ function MoviesCardList(props) {
                         Фильмы отсутствуют
                     </div>
             }
+            <button className="movies__more">Еще</button>
         </section>
     )
 }
