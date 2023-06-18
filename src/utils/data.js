@@ -7,7 +7,7 @@ const movies = [
         duration: "1ч 42м",
         likes: [ownerId],
         thumbnail: "./film1.png",
-        ownerId: ownerId
+        ownerId
     },
     {
         _id: 2,
@@ -15,7 +15,7 @@ const movies = [
         duration: "1ч 25м",
         likes: [ownerId],
         thumbnail: "./film2.png",
-        ownerId: ownerId
+        ownerId
     },
     {
         _id: 3,

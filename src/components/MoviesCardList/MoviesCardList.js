@@ -10,7 +10,7 @@ function MoviesCardList(props) {
         <section className="movies">
             {
                 props.movies ?
-                    props.movies.map(movie => props.savedMovies && movie.ownerId === currentUser._id ? (
+                    props.movies.map(movie => !props.savedMovies || (props.savedMovies && movie.ownerId === currentUser._id) ? (
                         <MoviesCard
                             key={movie._id}
                             movie={movie}

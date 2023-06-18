@@ -63,7 +63,7 @@
 .navigation__link {
     font-family: 'Inter', Arial, sans-serif;
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 16px;
     font-style: normal;
     text-decoration: none;
@@ -73,6 +73,9 @@
     height: 18px;
     padding: 8px 0;
     color: #000;
+}
+.navigation__link-selected{
+    font-weight: 500;
 }
 
 .navigation__link-login {
