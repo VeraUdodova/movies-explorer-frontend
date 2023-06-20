@@ -1,18 +1,21 @@
-.promo{
-    background-color: #f5f5f5;
-    width: 1200px;
-    height: 493px;
-    margin: 0 auto;
+.promo {
+    max-width: 1200px;
+    margin: 20px auto 0;
     border-radius: 10px;
 }
-.promo__container{
-    width:1200px;
-    height: 427px;
+
+.promo__container {
+    height: 493px;
+    background-color: #f5f5f5;
+    max-width: 1200px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
+    gap: 150px;
     align-items: center;
+    flex-direction: column;
 }
-.promo__title{
+
+.promo__title {
     font-family: 'Inter', Arial, sans-serif;
     font-style: normal;
     font-weight: 400;
