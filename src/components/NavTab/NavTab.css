@@ -24,3 +24,18 @@
     padding: 0;
     margin: 0;
 }
+
+@media screen and (max-width: 600px) {
+    .navtab {
+        height: 43px;
+        gap: 6px;
+    }
+
+    .navtab__link {
+        font-size: 10px;
+        line-height: 16px;
+        width: 82px;
+        height: 26px;
+        border-radius: 6px;
+    }
+}

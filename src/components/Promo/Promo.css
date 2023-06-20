@@ -1,18 +1,18 @@
 .promo {
     max-width: 1200px;
     margin: 20px auto 0;
-    border-radius: 10px;
 }
 
 .promo__container {
     height: 493px;
-    background-color: #f5f5f5;
     max-width: 1200px;
+    background-color: #f5f5f5;
     display: flex;
     justify-content: flex-end;
     gap: 150px;
     align-items: center;
     flex-direction: column;
+    border-radius: 10px;
 }
 
 .promo__title {
@@ -24,4 +24,44 @@
     text-align: center;
     padding: 0;
     margin: 0;
+    width: 800px;
+    letter-spacing: -0.04em;
+}
+
+@media screen and (max-width: 1280px) {
+    .promo__container {
+        margin: 0 20px;
+    }
+}
+
+@media screen and (max-width: 950px) {
+    .promo__title {
+        width: 600px;
+        font-size: 40px;
+        line-height: 52px;
+    }
+
+    .promo__container {
+        gap: 314px;
+        height: 834px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .promo__container {
+        margin: 0 14px;
+    }
+
+    .promo__title {
+        padding: 0;
+        width: 292px;
+        font-size: 29px;
+        line-height: 37px;
+    }
+
+    .promo__container {
+        gap: 212px;
+        height: 586px;
+    }
+
 }
