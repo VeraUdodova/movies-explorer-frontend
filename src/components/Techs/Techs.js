@@ -3,12 +3,12 @@ import "./Techs.css";
 const Techs = (props) => {
     return (
         <section className="techs" id={props.anchor}>
-            <h2 className="techs__title">О проекте</h2>
+            <h2 className="techs__title">Технологии</h2>
 
             <div className="techs__container">
                 <p className="techs__maintitle">7 технологий</p>
                 <p className="techs__subtitle">
-                    На курсе веб-разработки мы освоили технологии, которые применили<br/>
+                    На курсе веб-разработки мы освоили технологии, которые применили
                     в дипломном проекте.
                 </p>
 

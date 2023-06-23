@@ -1,11 +1,12 @@
-.aboutproject{
+.aboutproject {
     max-width: 1140px;
     height: 608px;
     margin: 0 70px;
     padding: 140px 0;
     box-sizing: border-box;
 }
-.aboutproject__title{
+
+.aboutproject__title {
     font-family: 'Inter', Arial, sans-serif;
     font-style: normal;
     font-weight: 400;
@@ -13,19 +14,23 @@
     line-height: 27px;
     padding: 0 0 23px;
     margin: 0;
+    letter-spacing: -0.88px;
     border-bottom: 1px solid #000;
 }
-.aboutproject__stages{
+
+.aboutproject__stages {
     margin-top: 70px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     column-gap: 40px;
 }
-.aboutproject__stage{
+
+.aboutproject__stage {
     width: 550px;
 }
-.aboutproject__stage__title{
+
+.aboutproject__stage__title {
     font-family: 'Inter', Arial, sans-serif;
     font-style: normal;
     font-weight: 400;
@@ -36,7 +41,7 @@
     margin: 0;
 }
 
-.aboutproject__stage__text{
+.aboutproject__stage__text {
     font-family: 'Inter', Arial, sans-serif;
     font-style: normal;
     font-weight: 400;
@@ -46,23 +51,27 @@
     margin: 26px 0 0;
 }
 
-.aboutproject__progressbar{
+.aboutproject__progressbar {
     display: flex;
     flex-direction: row;
     margin: 110px 0 0;
 }
-.aboutproject__progressbar__item{
+
+.aboutproject__progressbar__item {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.aboutproject__progressbar__item-backend{
-    width: 228px;
+
+.aboutproject__progressbar__item-backend {
+    width: 20%;
 }
-.aboutproject__progressbar__item-frontend{
-    width: 912px;
+
+.aboutproject__progressbar__item-frontend {
+    width: 80%;
 }
-.aboutproject__progressbar__title{
+
+.aboutproject__progressbar__title {
     font-family: 'Inter', Arial, sans-serif;
     font-style: normal;
     font-weight: 400;
@@ -76,26 +85,28 @@
     align-items: center;
     justify-content: center;
 }
-.aboutproject__progressbar__title-backend{
+
+.aboutproject__progressbar__title-backend {
     background-color: #2BE080;
 }
-.aboutproject__progressbar__title-frontend{
+
+.aboutproject__progressbar__title-frontend {
     background-color: #f2f2f2;
 }
-.aboutproject__progressbar__text{
+
+.aboutproject__progressbar__text {
     font-family: 'Inter', Arial, sans-serif;
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
     line-height: 17px;
-    color:#a0a0a0;
+    color: #a0a0a0;
     padding: 0;
     margin: 14px 0 0;
 }
 
 @media screen and (max-width: 950px) {
-    .aboutproject{
-        max-width: 668px;
+    .aboutproject {
         height: 585px;
         margin: 0 50px;
         padding: 90px 0;
@@ -105,37 +116,28 @@
         column-gap: 30px;
     }
 
-    .aboutproject__stage{
+    .aboutproject__stage {
         width: 319px;
     }
 
-    .aboutproject__stage__text{
+    .aboutproject__stage__text {
         font-size: 12px;
         line-height: 18px;
         padding: 0;
         margin: 22px 0 0;
     }
 
-    .aboutproject__progressbar{
+    .aboutproject__progressbar {
         margin: 93px 0 0;
     }
 
-    .aboutproject__progressbar__item-backend{
-        width: 140px;
-
-    }
-    .aboutproject__progressbar__item-frontend{
-        width: 528px;
-    }
-
-    .aboutproject__progressbar__text{
+    .aboutproject__progressbar__text {
         font-weight: 400;
     }
 }
 
 @media screen and (max-width: 600px) {
-    .aboutproject{
-        max-width: 284px;
+    .aboutproject {
         height: 641px;
         margin: 0 18px;
         padding: 70px 0;
@@ -146,48 +148,30 @@
         row-gap: 56px;
     }
 
-    .aboutproject__stage{
-        width: 284px;
+    .aboutproject__stage {
+        width: 100%;
     }
 
-    .aboutproject__stage__text{
+    .aboutproject__stage__text {
         font-size: 11px;
         line-height: 16px;
         padding: 0;
         margin: 16px 0 0;
     }
 
-    .aboutproject__progressbar{
+    .aboutproject__progressbar {
         margin: 60px 0 0;
     }
 
-    .aboutproject__progressbar__item-backend{
-        width: 100px;
-
-    }
-    .aboutproject__progressbar__item-frontend{
-        width: 184px;
-    }
-
-    .aboutproject__progressbar__title{
+    .aboutproject__progressbar__title {
         font-size: 11px;
         line-height: 13px;
         height: 35px;
     }
 
-    .aboutproject__progressbar__text{
+    .aboutproject__progressbar__text {
         font-size: 11px;
         line-height: 13px;
         font-weight: 400;
     }
 }
-
-
-/*@media screen and (max-width: 1280px) {*/
-/*}*/
-
-/*@media screen and (max-width: 950px) {*/
-/*}*/
-
-/*@media screen and (max-width: 600px) {*/
-/*}*/

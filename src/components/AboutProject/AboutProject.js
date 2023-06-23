@@ -37,7 +37,7 @@ const AboutProject = (props) => {
                 </div>
                 <div className="aboutproject__progressbar__item aboutproject__progressbar__item-frontend">
                     <p className="aboutproject__progressbar__title aboutproject__progressbar__title-frontend">
-                        5 недель
+                        4 недели
                     </p>
                     <p className="aboutproject__progressbar__text">
                         Front-end
