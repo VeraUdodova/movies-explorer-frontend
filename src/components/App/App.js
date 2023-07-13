@@ -15,7 +15,7 @@ import {movies as static_movies, user as currentUser} from "../../utils/data";
 function App() {
     const [movies, setMovies] = useState([])
 
-    const loggedIn = false;
+    const loggedIn = true;
 
     function changeMovie(changedMovie) {
         setMovies(movies.map(movie => movie._id === changedMovie._id ? changedMovie : movie))

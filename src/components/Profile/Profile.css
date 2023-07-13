@@ -1,5 +1,5 @@
 .profile{
-    width: 410px;
+    max-width: 410px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -29,7 +29,7 @@
     color: #ee3465;
 }
 .profile__item{
-    width: 410px;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     padding: 0;
@@ -40,7 +40,7 @@
 .profile__line{
     border-top: 1px solid #E8E8E8;
     height: 1px;
-    width:410px;
+    width: 100%;
 }
 .profile__label{
     font-family: 'Inter', Arial, sans-serif;
@@ -59,4 +59,10 @@
     font-style: normal;
     padding: 0;
     margin: 0;
+}
+
+@media screen and (max-width: 600px) {
+    .profile {
+        max-width: 260px;
+    }
 }
