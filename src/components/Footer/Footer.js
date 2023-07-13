@@ -22,16 +22,12 @@ function Footer() {
                         to="https://practicum.yandex.ru"
                         target="_blank"
                         className="footer__link"
-                    >
-                        Яндекс.Практикум
-                    </Link>
+                    >Яндекс.Практикум</Link>
                     <Link
                         to="https://github.com/"
                         target="_blank"
                         className="footer__link"
-                    >
-                        Github
-                    </Link>
+                    >Github</Link>
                 </div>
             </div>
         </footer>

@@ -9,7 +9,7 @@ function SearchForm() {
                 <input className="searchform__input" placeholder="Фильм"/>
                 <button type="submit" className="searchform__button"></button>
             </div>
-            <div className="searchform__block">
+            <div className="searchform__block searchform__block-filter">
                 <span className="searchform__line"></span>
                 <FilterCheckbox
                     title="Короткометражки"
