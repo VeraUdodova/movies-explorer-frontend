@@ -1,5 +1,5 @@
 .moviecard {
-    width: 1140px;
+    width: 100%;
     height: 134px;
     background-color: #f9f9f9;
     display: flex;
@@ -11,6 +11,9 @@
 .moviecard__info {
     margin: 22px;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .moviecard__name {
@@ -22,6 +25,7 @@
     margin: 0;
     padding: 0;
 }
+
 .moviecard__duration {
     font-family: 'Inter', Arial, sans-serif;
     font-style: normal;
@@ -32,6 +36,7 @@
     margin: 13px 0 0;
     padding: 0;
 }
+
 .moviecard__icon {
     margin: 30px 0 0;
     padding: 0;
@@ -43,17 +48,49 @@
     background-color: transparent;
     cursor: pointer;
 }
-.moviecard__icon-dislike{
+
+.moviecard__icon-dislike {
     background-image: url(../../images/dislike.svg);
 }
-.moviecard__icon-like{
+
+.moviecard__icon-like {
     background-image: url(../../images/like.svg);
 }
-.moviecard__icon-delete{
+
+.moviecard__icon-delete {
     background-image: url(../../images/delete.svg);
 }
-.moviecard__thumbnail{
+
+.moviecard__thumbnail {
     width: 220px;
     height: 122px;
     margin: auto 0;
+}
+
+@media screen and (max-width: 600px) {
+    .moviecard__thumbnail {
+        width: 300px;
+        height: 168px;
+        margin: auto 0;
+    }
+
+    .moviecard__name {
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    .moviecard__info {
+        margin: 12px 14px 16px;
+        flex-direction: row;
+    }
+
+    .moviecard__icon {
+        margin: 0;
+    }
+
+    .moviecard {
+        height: 232px;
+        flex-direction: column-reverse;
+        margin: 0 0 20px;
+    }
 }

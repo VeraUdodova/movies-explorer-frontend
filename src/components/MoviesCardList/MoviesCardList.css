@@ -1,11 +1,12 @@
 .movies {
-    width: 1280px;
+    max-width: 1280px;
     box-sizing: border-box;
     padding: 70px 70px 110px;
-    margin: 0 auto;
+    margin: 110px auto 0;
     display: flex;
     justify-content: center;
     flex-direction: column;
+    border-top: 1px solid #E8E8E8;
 }
 
 .movies__zero {
@@ -32,4 +33,22 @@
     border-radius: 10px;
     border: 1px solid #E8E8E8;
     background-color: white;
+}
+
+@media screen and (max-width: 950px) {
+    .movies {
+        max-width: 768px;
+        padding: 70px 30px 110px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .movies {
+        max-width: 300px;
+        padding: 70px 0 110px;
+    }
+
+    .movies__more {
+        width: 240px;
+    }
 }
