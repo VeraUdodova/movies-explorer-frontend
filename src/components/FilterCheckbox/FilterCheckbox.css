@@ -3,7 +3,7 @@
     flex-direction: row;
     justify-content: space-between;
     gap: 14px;
-    align-items: center;
+    /*align-items: end;*/
 }
 
 .filtercheckbox__title {
@@ -12,7 +12,7 @@
     font-weight: 400;
     font-size: 13px;
     line-height: 18px;
-    padding: 0;
+    padding: 0 30px 0 0;
 }
 
 .filtercheckbox__checkbox {

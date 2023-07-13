@@ -89,6 +89,14 @@
         letter-spacing: -0.48px;
         width: 460px;
     }
+    .techs__technology{
+        width: 84px;
+        height: 57px;
+    }
+
+    .techs__technologies{
+        max-width: 580px;
+    }
 }
 
 @media screen and (max-width: 600px) {

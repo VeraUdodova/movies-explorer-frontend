@@ -6,11 +6,11 @@ function Movies(props) {
     return (
         <>
             <SearchForm/>
-            <MoviesCardList
-                movies={props.movies}
-                savedMovies={false}
-                onMovieLike={props.onMovieLike}
-            />
+            {/*<MoviesCardList*/}
+            {/*    movies={props.movies}*/}
+            {/*    savedMovies={false}*/}
+            {/*    onMovieLike={props.onMovieLike}*/}
+            {/*/>*/}
         </>
     )
 }
