@@ -100,12 +100,6 @@
     text-decoration: none;
 }
 
-/*@media screen and (max-width: 950px) {*/
-/*    .login__top {*/
-/*        !*margin: 232px 0 0;*!*/
-/*    }*/
-/*}*/
-
 @media screen and (max-width: 600px) {
     .login {
         width: 260px;
