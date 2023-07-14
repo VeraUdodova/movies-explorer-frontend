@@ -38,6 +38,9 @@
     background-repeat: no-repeat;
     background-position: right 50%;
 }
+.portfolio__items__item:hover {
+    opacity: 0.6;
+}
 
 .portfolio__items__item-last{
     border: none;

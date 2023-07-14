@@ -18,6 +18,10 @@
     min-height: 38px;
     min-width: 38px;
     background-size: 38px 38px;
+    cursor: pointer;
+}
+.header__logo:hover{
+    opacity: 0.8;
 }
 
 @media screen and (max-width: 950px) {

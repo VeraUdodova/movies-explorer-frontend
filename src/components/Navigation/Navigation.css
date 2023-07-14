@@ -74,6 +74,9 @@
     background-color: #2BE080;
     border-radius: 3px;
 }
+.navigation__link:hover{
+    opacity: 0.8;
+}
 
 .navigation__button-burger {
     display: none;

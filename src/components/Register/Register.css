@@ -100,6 +100,17 @@
     text-decoration: none;
 }
 
+.register__button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.register__auth-link:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+
 @media screen and (max-width: 600px) {
     .register {
         width: 260px;

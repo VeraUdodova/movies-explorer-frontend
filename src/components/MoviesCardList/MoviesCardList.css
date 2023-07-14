@@ -33,6 +33,10 @@
     border-radius: 10px;
     border: 1px solid #E8E8E8;
     background-color: white;
+    cursor: pointer;
+}
+.movies__more:hover {
+    opacity: 0.8;
 }
 
 @media screen and (max-width: 950px) {

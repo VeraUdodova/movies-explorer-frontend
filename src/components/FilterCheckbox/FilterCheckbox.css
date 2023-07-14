@@ -26,6 +26,9 @@
     margin: 8px 0 0;
     cursor: pointer;
 }
+.filtercheckbox__checkbox:hover {
+    opacity: 0.8;
+}
 .filtercheckbox__checkbox:checked{
     background-image: url(../../images/checkbox-set.svg);
 }

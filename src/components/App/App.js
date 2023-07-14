@@ -47,24 +47,26 @@ function App() {
         <div className="App">
             <CurrentUserContext.Provider value={currentUser}>
                 <Header loggedIn={loggedIn}/>
-                <Routes>
-                    <Route path="/" element={<Main/>}/>
-                    <Route path="/movies" element={
-                        <Movies
-                            movies={movies}
-                            onMovieLike={onMovieLike}
-                        />
-                    }/>
-                    <Route path="/saved-movies" element={
-                        <SavedMovies
-                            movies={movies}
-                            onMovieDelete={onMovieDelete}
-                        />
-                    }/>
-                    <Route path="/profile" element={<Profile/>}/>
-                    <Route path="/signin" element={<Login/>}/>
-                    <Route path="/signup" element={<Register/>}/>
-                </Routes>
+                <main>
+                    <Routes>
+                        <Route path="/" element={<Main/>}/>
+                        <Route path="/movies" element={
+                            <Movies
+                                movies={movies}
+                                onMovieLike={onMovieLike}
+                            />
+                        }/>
+                        <Route path="/saved-movies" element={
+                            <SavedMovies
+                                movies={movies}
+                                onMovieDelete={onMovieDelete}
+                            />
+                        }/>
+                        <Route path="/profile" element={<Profile/>}/>
+                        <Route path="/signin" element={<Login/>}/>
+                        <Route path="/signup" element={<Register/>}/>
+                    </Routes>
+                </main>
                 <Footer loggedIn={loggedIn}/>
             </CurrentUserContext.Provider>
         </div>

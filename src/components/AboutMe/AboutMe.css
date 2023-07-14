@@ -74,6 +74,9 @@
     padding: 0;
     margin: 0;
 }
+.aboutme__github:hover {
+    opacity: 0.6;
+}
 
 .aboutme__photo {
     background-image: url(../../images/photo.jpeg);
