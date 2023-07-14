@@ -19,6 +19,7 @@ const Register = () => {
                         name="name"
                         type="text"
                         className="register__form-input"
+                        required
                     />
 
                     <label className="register__form-label">E-mail</label>
@@ -27,6 +28,7 @@ const Register = () => {
                         name="email"
                         type="email"
                         className="register__form-input"
+                        required
                     />
 
                     <label className="register__form-label">Пароль</label>
@@ -35,6 +37,7 @@ const Register = () => {
                         name="password"
                         type="password"
                         className="register__form-input"
+                        required
                     />
                 </div>
 
