@@ -81,6 +81,7 @@
     color: #fff;
     background-color: #2BE080;
     border: none;
+    border-radius: 3px;
 }
 
 .login__signin {

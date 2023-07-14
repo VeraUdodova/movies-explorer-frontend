@@ -21,7 +21,7 @@ function Profile() {
                 <p className="profile__value">{currentUser.email}</p>
             </div>
             <Link className="profile__link" to="/profile">Редактировать</Link>
-            <Link className="profile__link profile__link-logout" to="/signout">Вытий из аккаунта</Link>
+            <Link className="profile__link profile__link-logout" to="/signout">Выйти из аккаунта</Link>
         </section>
     )
 }
