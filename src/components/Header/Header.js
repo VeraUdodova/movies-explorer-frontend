@@ -5,7 +5,7 @@ import "./Header.css";
 
 function Header(props) {
     const { pathname } = useLocation();
-    const [isBurgerMenuOpen, setBurgerMenuOpen] = useState([])
+    const [isBurgerMenuOpen, setBurgerMenuOpen] = useState(false)
 
     if (['/signin', '/signup'].includes(pathname)) {
         return <></>;

@@ -16,12 +16,15 @@ import {catchError} from "../../utils/utils";
 import {mainApi} from "../../utils/MainApi";
 
 function App() {
-    const [movies, setMovies] = useState([])
-    const [isErrorOpen, setIsErrorOpen] = useState(false)
-    const [errorMessage, setErrorMessage] = useState("")
+    const [movies, setMovies] = useState([]);
+    const [isErrorOpen, setIsErrorOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [currentUser, setCurrentUser] = useState({})
 
-    const navigate = useNavigate()
-    const loggedIn = false;
+    const navigate = useNavigate();
 
     function changeMovie(changedMovie) {
         setMovies(movies.map(movie => movie._id === changedMovie._id ? changedMovie : movie))
@@ -63,16 +66,82 @@ function App() {
         return message
     }
 
+    const handleTokenCheck = () => {
+        const token = localStorage.getItem("token")
+        if (token) {
+            mainApi.userInfo(token).then((user) => {
+                if (user._id) {
+                    setEmail(user.email)
+                    setCurrentUser(user)
+                    setLoggedIn(true)
+                    navigate("/", {replace: true})
+                } else {
+                    handleLogOut()
+                }
+            }).catch((err) => {
+                setCurrentUser({});
+                handleLogOut()
+                catchError(err)
+            })
+        }
+    }
+
+    const handleLoginSuccess = (data) => {
+        const {token, name, email} = data;
+
+        localStorage.setItem("token", token)
+        setLoggedIn(true)
+        setCurrentUser(data)
+        setEmail(email)
+        setName(name)
+        navigate("/movies", {replace: true})
+    }
+
+    function handleLogOut() {
+        localStorage.removeItem("token")
+        setLoggedIn(false)
+        setEmail("")
+        setName("")
+        navigate("/signin", {replace: true})
+    }
+
+    function handleRegistrationFailed(data) {
+        setErrorMessage(makeErrorMessage(data))
+        setIsErrorOpen(true)
+    }
+
+    function handleRegistrationSuccess(email, password) {
+        onLogin(email, password)
+    }
+
     const onRegister = (name, email, password) => {
         mainApi.signUp({name: name, email: email, password: password}).then((data) => {
-            navigate('/movies', {replace: true})
+            data.name ?
+                handleRegistrationSuccess(email, password) :
+                handleRegistrationFailed({"message": "Что-то пошло не так"})
         }).catch((err) => {
-            catchError(err).then(function (data) {
-                setErrorMessage(makeErrorMessage(data));
-                setIsErrorOpen(true);
-            });
+            catchError(err).then(data => handleRegistrationFailed(data))
         })
     }
+
+    function handleLoginFailed(data) {
+        setErrorMessage(makeErrorMessage(data));
+        setIsErrorOpen(true);
+    }
+
+    const onLogin = (email, password) => {
+        mainApi.signIn({email: email, password: password}).then((data) => {
+            data.token ?
+                handleLoginSuccess(data) :
+                handleLoginFailed({"message": "Что-то пошло не так"})
+        }).catch((err) => {
+            catchError(err).then(data => handleLoginFailed(data))
+        })
+    }
+
+    useEffect(() => {
+        handleTokenCheck();
+    }, [])
 
     return (
         <div className="App">
@@ -94,9 +163,8 @@ function App() {
                             />
                         }/>
                         <Route path="/profile" element={<Profile/>}/>
-                        <Route path="/signin" element={<Login/>}/>
-                        <Route path="/signup"
-                               element={<Register onRegister={onRegister}/>}/>
+                        <Route path="/signin" element={<Login onLogin={onLogin}/>}/>
+                        <Route path="/signup" element={<Register onRegister={onRegister}/>}/>
                     </Routes>
                 </main>
                 <Footer loggedIn={loggedIn}/>

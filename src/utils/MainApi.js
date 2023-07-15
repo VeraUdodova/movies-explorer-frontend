@@ -37,18 +37,18 @@ export class BaseApi {
 }
 
 class MainApi extends BaseApi {
-    // signIn(body) {
-    //     return this._save('/signin', 'POST', body)
-    // }
+    signIn(body) {
+        return this._save('/signin', 'POST', body)
+    }
 
     signUp(body) {
         return this._save('/signup', 'POST', body)
     }
 
-    // userInfo(token) {
-    //     return this._get('/users/me', token)
-    // }
-    //
+    userInfo(token) {
+        return this._get('/users/me', token)
+    }
+
     // getInitialCards() {
     //     return this._get('/cards');
     // }
