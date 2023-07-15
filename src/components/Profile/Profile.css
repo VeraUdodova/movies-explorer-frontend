@@ -30,6 +30,8 @@
 }
 .profile__link-logout{
     color: #ee3465;
+    border:0;
+    cursor: pointer;
 }
 .profile__item{
     width: 100%;

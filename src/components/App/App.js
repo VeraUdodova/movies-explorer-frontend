@@ -95,6 +95,8 @@ function App() {
         setEmail(email)
         setName(name)
         navigate("/movies", {replace: true})
+
+        handleTokenCheck()
     }
 
     function handleLogOut() {
@@ -102,7 +104,8 @@ function App() {
         setLoggedIn(false)
         setEmail("")
         setName("")
-        navigate("/signin", {replace: true})
+        setCurrentUser({})
+        navigate("/", {replace: true})
     }
 
     function handleRegistrationFailed(data) {
@@ -116,7 +119,7 @@ function App() {
 
     const onRegister = (name, email, password) => {
         mainApi.signUp({name: name, email: email, password: password}).then((data) => {
-            data.name ?
+            data._id ?
                 handleRegistrationSuccess(email, password) :
                 handleRegistrationFailed({"message": "Что-то пошло не так"})
         }).catch((err) => {
@@ -137,6 +140,10 @@ function App() {
         }).catch((err) => {
             catchError(err).then(data => handleLoginFailed(data))
         })
+    }
+
+    const onLogout = () => {
+        handleLogOut();
     }
 
     useEffect(() => {
@@ -162,7 +169,7 @@ function App() {
                                 onMovieDelete={onMovieDelete}
                             />
                         }/>
-                        <Route path="/profile" element={<Profile/>}/>
+                        <Route path="/profile" element={<Profile onLogout={onLogout}/>}/>
                         <Route path="/signin" element={<Login onLogin={onLogin}/>}/>
                         <Route path="/signup" element={<Register onRegister={onRegister}/>}/>
                     </Routes>
