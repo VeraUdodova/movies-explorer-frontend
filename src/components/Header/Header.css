@@ -1,0 +1,31 @@
+.header{
+    margin: 0 auto;
+    max-width: 1280px;
+    height: 74px;
+}
+
+.header__container{
+    margin: 0 70px;
+    height: 74px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header__logo {
+    background-image: url("../../images/logo.svg");
+    background-repeat: no-repeat;
+    min-height: 38px;
+    min-width: 38px;
+    background-size: 38px 38px;
+    cursor: pointer;
+}
+.header__logo:hover{
+    opacity: 0.8;
+}
+
+@media screen and (max-width: 950px) {
+    .header__container{
+        margin: 0 30px;
+    }
+}
