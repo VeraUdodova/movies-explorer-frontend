@@ -1,7 +1,29 @@
+import {useState} from 'react';
 import {Link} from "react-router-dom";
 import "./Register.css";
 
-const Register = () => {
+const Register = ({onRegister}) => {
+    const [formValue, setFormValue] = useState({
+        name: '',
+        email: '',
+        password: ''
+    })
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+
+        setFormValue({
+            ...formValue,
+            [name]: value
+        });
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (formValue.name && formValue.email && formValue.password) {
+            onRegister(formValue.name, formValue.email, formValue.password)
+        }
+    }
+
     return (
         <div className="register">
             <div className="register__top">
@@ -11,7 +33,7 @@ const Register = () => {
                 </p>
             </div>
 
-            <form className="register__form">
+            <form onSubmit={handleSubmit} className="register__form">
                 <div className="register__form__container">
                     <label className="register__form-label">Имя</label>
                     <input
@@ -19,6 +41,8 @@ const Register = () => {
                         name="name"
                         type="text"
                         className="register__form-input"
+                        value={formValue.name}
+                        onChange={handleChange}
                         required
                     />
 
@@ -28,6 +52,8 @@ const Register = () => {
                         name="email"
                         type="email"
                         className="register__form-input"
+                        value={formValue.email}
+                        onChange={handleChange}
                         required
                     />
 
@@ -38,6 +64,8 @@ const Register = () => {
                         type="password"
                         className="register__form-input"
                         required
+                        value={formValue.password}
+                        onChange={handleChange}
                     />
                 </div>
 

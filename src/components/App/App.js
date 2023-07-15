@@ -1,21 +1,27 @@
 import {useState, useEffect} from "react";
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import Login from "../Login/Login";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
+import Error from "../Error/Error";
 import Profile from "../Profile/Profile"
 import Register from "../Register/Register";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import {CurrentUserContext} from "../../contexts/CurrentUserContext";
 import "./App.css";
 import {movies as static_movies, user as currentUser} from "../../utils/data";
+import {catchError} from "../../utils/utils";
+import {mainApi} from "../../utils/MainApi";
 
 function App() {
     const [movies, setMovies] = useState([])
+    const [isErrorOpen, setIsErrorOpen] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
 
-    const loggedIn = true;
+    const navigate = useNavigate()
+    const loggedIn = false;
 
     function changeMovie(changedMovie) {
         setMovies(movies.map(movie => movie._id === changedMovie._id ? changedMovie : movie))
@@ -42,6 +48,31 @@ function App() {
         setMovies(static_movies);
     }, [])
 
+    function closeError() {
+        setIsErrorOpen(false);
+    }
+
+    function makeErrorMessage(data) {
+        let message;
+        if (data.message === "Validation failed") {
+            message = `Ошибка валидации: ${data.validation.body.keys}`;
+        } else {
+            message = data.message
+        }
+
+        return message
+    }
+
+    const onRegister = (name, email, password) => {
+        mainApi.signUp({name: name, email: email, password: password}).then((data) => {
+            navigate('/movies', {replace: true})
+        }).catch((err) => {
+            catchError(err).then(function (data) {
+                setErrorMessage(makeErrorMessage(data));
+                setIsErrorOpen(true);
+            });
+        })
+    }
 
     return (
         <div className="App">
@@ -64,10 +95,16 @@ function App() {
                         }/>
                         <Route path="/profile" element={<Profile/>}/>
                         <Route path="/signin" element={<Login/>}/>
-                        <Route path="/signup" element={<Register/>}/>
+                        <Route path="/signup"
+                               element={<Register onRegister={onRegister}/>}/>
                     </Routes>
                 </main>
                 <Footer loggedIn={loggedIn}/>
+                <Error
+                    isOpen={isErrorOpen}
+                    onClose={closeError}
+                    message={errorMessage}
+                />
             </CurrentUserContext.Provider>
         </div>
     );
