@@ -8,48 +8,52 @@ import Movies from "../Movies/Movies";
 import Error from "../Error/Error";
 import Profile from "../Profile/Profile"
 import Register from "../Register/Register";
+import Preloader from "../Preloader/Preloader";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import {CurrentUserContext} from "../../contexts/CurrentUserContext";
-import "./App.css";
-import {movies as static_movies, user as currentUser} from "../../utils/data";
 import {catchError} from "../../utils/utils";
 import {mainApi} from "../../utils/MainApi";
+import {moviesApi} from "../../utils/MoviesApi";
+import "./App.css";
 
 function App() {
-    const [movies, setMovies] = useState([]);
+    const navigate = useNavigate();
+
+    const cardCountPerPage = 7;  // количество карточек на "страницу"
+    const cardCountPerPageMobile = 5;  // количество карточек на "страницу" в мобильной версии
+
     const [isErrorOpen, setIsErrorOpen] = useState(false);
+    const [isPreloaderVisible, setIsPreloaderVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [loggedIn, setLoggedIn] = useState(false);
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [currentUser, setCurrentUser] = useState({})
+    const [movies, setMovies] = useState([]);
+    const [searchFormSearchString, setSearchFormSearchString] = useState("");
+    const [searchFormFilter, setSearchFormFilter] = useState(false);
+    const [movieCountPerPage, setMovieCountPerPage] = useState(cardCountPerPage)
 
-    const navigate = useNavigate();
 
-    function changeMovie(changedMovie) {
-        setMovies(movies.map(movie => movie._id === changedMovie._id ? changedMovie : movie))
-    }
+    // function changeMovie(changedMovie) {
+    //     setMovies(movies.map(movie => movie._id === changedMovie._id ? changedMovie : movie))
+    // }
 
     const onMovieLike = function (movie) {
         const isLiked = movie.likes.some(ownerId => ownerId === currentUser._id)
 
         if (isLiked) {
             movie.likes = movie.likes.filter(ownerId => ownerId !== currentUser._id);
-            changeMovie(movie)
+            // changeMovie(movie)
         } else {
             movie.likes = [currentUser._id];
-            changeMovie(movie)
+            // changeMovie(movie)
         }
-
     }
 
-    const onMovieDelete = function (movie) {
-        setMovies(movies.filter(m => m._id !== movie._id))
-    }
-
-    useEffect(() => {
-        setMovies(static_movies);
-    }, [])
+    // const onMovieDelete = function (movie) {
+    //     setMovies(movies.filter(m => m._id !== movie._id))
+    // }
 
     function closeError() {
         setIsErrorOpen(false);
@@ -142,13 +146,45 @@ function App() {
         })
     }
 
+    const handleApiError = () => {
+        setErrorMessage(
+            "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер " +
+            "недоступен. Подождите немного и попробуйте ещё раз"
+        );
+        setIsErrorOpen(true);
+    }
+
     const onLogout = () => {
         handleLogOut();
     }
 
     useEffect(() => {
         handleTokenCheck();
-    }, [])
+    }, [])  // eslint-disable-next-line
+
+    function searchMovie(film_name, short_movie) {
+        setIsPreloaderVisible(true)
+        moviesApi.getMovies().then(function (data) {
+            setIsPreloaderVisible(false)
+            setMovies(data)
+        }).catch((err) => {
+            setIsPreloaderVisible(false)
+            catchError(err)
+            handleApiError()
+        })
+    }
+
+    useEffect(() => {
+        function updateSize() {
+            setTimeout(() => {
+                setMovieCountPerPage(window.innerWidth <= 600 ? cardCountPerPageMobile : cardCountPerPage)
+            }, 5000)
+        }
+
+        window.addEventListener('resize', updateSize);
+        updateSize();
+        return () => window.removeEventListener('resize', updateSize);
+    });
 
     return (
         <div className="App">
@@ -161,19 +197,31 @@ function App() {
                             <Movies
                                 movies={movies}
                                 onMovieLike={onMovieLike}
+                                searchMovie={searchMovie}
+                                setErrorMessage={setErrorMessage}
+                                setIsErrorOpen={setIsErrorOpen}
+                                searchFormSearchString={searchFormSearchString}
+                                setSearchFormSearchString={setSearchFormSearchString}
+                                searchFormFilter={searchFormFilter}
+                                setSearchFormFilter={setSearchFormFilter}
+                                movieCountPerPage={movieCountPerPage}
                             />
                         }/>
-                        <Route path="/saved-movies" element={
-                            <SavedMovies
-                                movies={movies}
-                                onMovieDelete={onMovieDelete}
+                        <Route path="/saved-movies" element={<SavedMovies/>}/>
+                        <Route path="/profile" element={
+                            <Profile
+                                onLogout={onLogout}
+                                email={email}
+                                setEmail={setEmail}
+                                name={name}
+                                setName={setName}
                             />
                         }/>
-                        <Route path="/profile" element={<Profile onLogout={onLogout}/>}/>
                         <Route path="/signin" element={<Login onLogin={onLogin}/>}/>
                         <Route path="/signup" element={<Register onRegister={onRegister}/>}/>
                     </Routes>
                 </main>
+                {isPreloaderVisible ? <Preloader/> : ""}
                 <Footer loggedIn={loggedIn}/>
                 <Error
                     isOpen={isErrorOpen}

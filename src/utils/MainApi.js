@@ -2,6 +2,7 @@ export class BaseApi {
     constructor(options) {
         this._baseUrl = options.baseUrl
         this._headers = options.headers
+        this._useToken = options.useToken
     }
 
     _statusCheck(res) {
@@ -12,7 +13,9 @@ export class BaseApi {
     }
 
     _add_token() {
-        this._headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+        if (this._useToken) {
+            this._headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+        }
     }
 
     _get(link) {
@@ -49,14 +52,6 @@ class MainApi extends BaseApi {
         return this._get('/users/me', token)
     }
 
-    // getInitialCards() {
-    //     return this._get('/cards');
-    // }
-    //
-    // getUserInfo() {
-    //     return this._get('/users/me')
-    // }
-    //
     // editUserInfo(body) {
     //     return this._save('/users/me', 'PATCH', body)
     // }
@@ -76,15 +71,12 @@ class MainApi extends BaseApi {
     // deleteLike(cardId) {
     //     return this._save(`/cards/${cardId}/likes`, 'DELETE')
     // }
-    //
-    // editAvatar(body) {
-    //     return this._save('/users/me/avatar', 'PATCH', body)
-    // }
 }
 
 export const mainApi = new MainApi({
     baseUrl: 'https://api.filmopoisk.nomoredomains.rocks',
     headers: {
         'Content-Type': 'application/json'
-    }
+    },
+    useToken: true
 });

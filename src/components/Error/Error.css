@@ -56,20 +56,20 @@
 
 .error__failure-image {
     background-image: url("../../images/registration-fail.svg");
-    height: 120px;
-    width: 120px;
+    height: 100px;
+    width: 100px;
     background-repeat: no-repeat;
     background-size: cover;
-    margin: 27px auto 32px
+    margin: 20px auto 30px
 }
 
 
 .error__failure-text {
     font-family: 'Inter', Arial, sans-serif;
     font-style: normal;
-    font-weight: 900;
-    font-size: 24px;
-    line-height: 29px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 23px;
     text-align: center;
     width: 358px;
 }
