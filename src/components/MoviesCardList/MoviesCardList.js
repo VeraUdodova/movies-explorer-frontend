@@ -1,22 +1,24 @@
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
-import {CurrentUserContext} from "../../contexts/CurrentUserContext.js";
 import "./MoviesCardList.css";
 
 function MoviesCardList(props) {
-    const currentUser = useContext(CurrentUserContext)
-
     const [buttonVisible, setButtonVisible] = useState(false);
-
 
     const nextPage = function() {
         props.setCurrentPage(props.currentPage + 1)
     }
 
-    const movies = props.movies.filter(
-        movie => movie.nameRU.toLowerCase().includes(props.searchFormSearchString.toLowerCase())
-    )
-    const moviesSliced = movies.slice(0, props.movieCountPerPage * props.currentPage)
+    let movies = []
+
+    if (!props.savedMoviesFlag) {
+        movies = props.movies.filter(
+            movie => movie.nameRU.toLowerCase().includes(props.searchFormSearchString.toLowerCase())
+        )
+    } else {
+        movies = props.savedMovies
+    }
+    const moviesSliced = movies.length > 0 ? movies.slice(0, props.movieCountPerPage * props.currentPage) : []
 
     useEffect(() => {
         setButtonVisible(movies.length > props.currentPage * props.movieCountPerPage)
@@ -29,12 +31,11 @@ function MoviesCardList(props) {
                     <>
                         {moviesSliced.map(movie => (
                         <MoviesCard
-                            key={movie.id}
+                            key={movie.id || movie._id}
                             movie={movie}
-                            ownerId={currentUser._id}
-                            // savedMovies={props.savedMovies}
+                            savedMoviesIds={props.savedMoviesIds}
+                            savedMoviesFlag={props.savedMoviesFlag}
                             onMovieLike={props.onMovieLike}
-                            // onMovieDelete={props.onMovieDelete}
                         />))}
                         {
                             buttonVisible ?

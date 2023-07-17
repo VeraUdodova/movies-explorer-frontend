@@ -52,25 +52,17 @@ class MainApi extends BaseApi {
         return this._get('/users/me', token)
     }
 
-    // editUserInfo(body) {
-    //     return this._save('/users/me', 'PATCH', body)
-    // }
-    //
-    // addNewCard(body) {
-    //     return this._save('/cards', 'POST', body)
-    // }
-    //
-    // deleteCard(cardId) {
-    //     return this._save(`/cards/${cardId}`, 'DELETE')
-    // }
-    //
-    // addLike(cardId) {
-    //     return this._save(`/cards/${cardId}/likes`, 'PUT')
-    // }
-    //
-    // deleteLike(cardId) {
-    //     return this._save(`/cards/${cardId}/likes`, 'DELETE')
-    // }
+    saveMovie(body) {
+        return this._save('/movies', 'POST', body)
+    }
+
+    deleteMovie(movieId) {
+        return this._save(`/movies/${movieId}`, 'DELETE')
+    }
+
+    getSavedMovies() {
+        return this._get('/movies')
+    }
 }
 
 export const mainApi = new MainApi({

@@ -19,41 +19,111 @@ import "./App.css";
 function App() {
     const navigate = useNavigate();
 
-    const cardCountPerPage = 7;  // количество карточек на "страницу"
-    const cardCountPerPageMobile = 5;  // количество карточек на "страницу" в мобильной версии
+    // количество карточек на "страницу"
+    const cardCountPerPage = 7;
+    // количество карточек на "страницу" в мобильной версии
+    const cardCountPerPageMobile = 5;
 
+    // окно с ошибкой
     const [isErrorOpen, setIsErrorOpen] = useState(false);
+    // прелоадер
     const [isPreloaderVisible, setIsPreloaderVisible] = useState(false);
+    // текст ошибки
     const [errorMessage, setErrorMessage] = useState("");
+    // пользователь или гость
     const [loggedIn, setLoggedIn] = useState(false);
+    // электронная почта пользователя
     const [email, setEmail] = useState("");
+    // имя пользователя
     const [name, setName] = useState("");
+    // текущий пользователь
     const [currentUser, setCurrentUser] = useState({})
+    // фильмы (поиск)
     const [movies, setMovies] = useState([]);
+    // сохраненные фильмы (лайк)
+    const [savedMovies, setSavedMovies] = useState([]);
+    // строка поиска
     const [searchFormSearchString, setSearchFormSearchString] = useState("");
+    // фильтр Короткометражки
     const [searchFormFilter, setSearchFormFilter] = useState(false);
+    // количество фильмов на страницу
     const [movieCountPerPage, setMovieCountPerPage] = useState(cardCountPerPage)
+    // текущая страница фильмов
+    const [currentPage, setCurrentPage] = useState(1);
+    // текущая страница сохраненных фильмов
+    const [currentPageSaved, setCurrentPageSaved] = useState(1);
+    // идентификаторы сохраненных фильмов
+    const [savedMoviesIds, setSavedMoviesIds] = useState([]);
 
-
-    // function changeMovie(changedMovie) {
-    //     setMovies(movies.map(movie => movie._id === changedMovie._id ? changedMovie : movie))
-    // }
-
-    const onMovieLike = function (movie) {
-        const isLiked = movie.likes.some(ownerId => ownerId === currentUser._id)
-
-        if (isLiked) {
-            movie.likes = movie.likes.filter(ownerId => ownerId !== currentUser._id);
-            // changeMovie(movie)
-        } else {
-            movie.likes = [currentUser._id];
-            // changeMovie(movie)
-        }
+    const getSaveMoviesIds = function (data) {
+        setSavedMoviesIds(data.length > 0 ? data.map(item => item.id) : [])
     }
 
-    // const onMovieDelete = function (movie) {
-    //     setMovies(movies.filter(m => m._id !== movie._id))
-    // }
+    const getSavedMovies = function () {
+        mainApi.getSavedMovies().then(data => {
+            if (data) {
+                data = data.map(item => {
+                    item.id = item.movieId
+                    return item
+                })
+            }
+            setSavedMovies(data)
+            getSaveMoviesIds(data)
+
+            if (movies && data) {
+                const _data = movies.map(movie => {
+                    const item1 = data.filter(item0 => item0.id === movie.id)
+                    movie._id = item1 && item1.length > 0 ? item1[0]._id : undefined
+                    return movie
+                })
+
+                setMovies(_data)
+            }
+
+        }).catch(err => {
+            handleApiError()
+            catchError(err)
+        })
+    }
+
+    const onMovieLike = function (movie) {
+        const isLiked = savedMoviesIds.includes(movie.id)
+
+        if (!isLiked) {
+            const image = `https://api.nomoreparties.co${movie.image.url}`
+            const body = {
+                country: movie.country,
+                description: movie.description,
+                duration: movie.duration,
+                director: movie.director,
+                movieId: movie.id,
+                image: image,
+                nameRU: movie.nameRU,
+                nameEN: movie.nameEN,
+                year: movie.year,
+                trailerLink: movie.trailerLink,
+                thumbnail: image
+            }
+
+            mainApi.saveMovie(body).then(obj => {
+                getSavedMovies()
+            }).catch((err) => {
+                handleApiError()
+                catchError(err)
+            })
+        } else {
+            if (movie._id === undefined) {
+                handleApiError()
+            } else {
+                mainApi.deleteMovie(movie._id).then(obj => {
+                    getSavedMovies()
+                }).catch((err) => {
+                    handleApiError()
+                    catchError(err)
+                })
+            }
+        }
+    }
 
     function closeError() {
         setIsErrorOpen(false);
@@ -61,6 +131,7 @@ function App() {
 
     function makeErrorMessage(data) {
         let message;
+
         if (data.message === "Validation failed") {
             message = `Ошибка валидации: ${data.validation.body.keys}`;
         } else {
@@ -72,12 +143,16 @@ function App() {
 
     const handleTokenCheck = () => {
         const token = localStorage.getItem("token")
+
         if (token) {
             mainApi.userInfo(token).then((user) => {
                 if (user._id) {
                     setEmail(user.email)
                     setCurrentUser(user)
                     setLoggedIn(true)
+
+                    getSavedMovies()
+
                     navigate("/", {replace: true})
                 } else {
                     handleLogOut()
@@ -162,11 +237,13 @@ function App() {
         handleTokenCheck();
     }, [])  // eslint-disable-next-line
 
-    function searchMovie(film_name, short_movie) {
+    function searchMovie() {
         setIsPreloaderVisible(true)
-        moviesApi.getMovies().then(function (data) {
+
+        moviesApi.getMovies().then((data) =>{
             setIsPreloaderVisible(false)
             setMovies(data)
+            getSavedMovies()
         }).catch((err) => {
             setIsPreloaderVisible(false)
             catchError(err)
@@ -196,6 +273,8 @@ function App() {
                         <Route path="/movies" element={
                             <Movies
                                 movies={movies}
+                                savedMovies={savedMovies}
+                                savedMoviesIds={savedMoviesIds}
                                 onMovieLike={onMovieLike}
                                 searchMovie={searchMovie}
                                 setErrorMessage={setErrorMessage}
@@ -205,9 +284,28 @@ function App() {
                                 searchFormFilter={searchFormFilter}
                                 setSearchFormFilter={setSearchFormFilter}
                                 movieCountPerPage={movieCountPerPage}
+                                currentPage={currentPage}
+                                setCurrentPage={setCurrentPage}
                             />
                         }/>
-                        <Route path="/saved-movies" element={<SavedMovies/>}/>
+                        <Route path="/saved-movies" element={
+                            <SavedMovies
+                                movies={movies}
+                                savedMovies={savedMovies}
+                                savedMoviesIds={savedMoviesIds}
+                                onMovieLike={onMovieLike}
+                                searchMovie={searchMovie}
+                                setErrorMessage={setErrorMessage}
+                                setIsErrorOpen={setIsErrorOpen}
+                                searchFormSearchString={searchFormSearchString}
+                                setSearchFormSearchString={setSearchFormSearchString}
+                                searchFormFilter={searchFormFilter}
+                                setSearchFormFilter={setSearchFormFilter}
+                                movieCountPerPage={movieCountPerPage}
+                                currentPage={currentPageSaved}
+                                setCurrentPage={setCurrentPageSaved}
+                            />
+                        }/>
                         <Route path="/profile" element={
                             <Profile
                                 onLogout={onLogout}

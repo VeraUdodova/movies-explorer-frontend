@@ -1,10 +1,7 @@
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
-import {useState} from "react";
 
 function Movies(props) {
-    const [currentPage, setCurrentPage] = useState(1);
-
     return (
         <>
             <SearchForm
@@ -15,18 +12,20 @@ function Movies(props) {
                 setSearchFormSearchString={props.setSearchFormSearchString}
                 searchFormFilter={props.searchFormFilter}
                 setSearchFormFilter={props.setSearchFormFilter}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
+                currentPage={props.currentPage}
+                setCurrentPage={props.setCurrentPage}
             />
             <MoviesCardList
-                savedMovies={false}
+                savedMoviesIds={props.savedMoviesIds}
+                savedMoviesFlag={false}
+                savedMovies={props.savedMovies}
                 movies={props.movies}
                 onMovieLike={props.onMovieLike}
                 searchParams={props.searchParams}
                 searchFormSearchString={props.searchFormSearchString}
                 searchFormFilter={props.searchFormFilter}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
+                currentPage={props.currentPage}
+                setCurrentPage={props.setCurrentPage}
                 movieCountPerPage={props.movieCountPerPage}
             />
         </>
