@@ -10,11 +10,13 @@ import Profile from "../Profile/Profile"
 import Register from "../Register/Register";
 import Preloader from "../Preloader/Preloader";
 import SavedMovies from "../SavedMovies/SavedMovies";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import {CurrentUserContext} from "../../contexts/CurrentUserContext";
 import {catchError} from "../../utils/utils";
 import {mainApi} from "../../utils/MainApi";
 import {moviesApi} from "../../utils/MoviesApi";
 import "./App.css";
+import NotFound from "../NotFound/NotFound";
 
 function App() {
     const navigate = useNavigate();
@@ -234,8 +236,9 @@ function App() {
     }
 
     useEffect(() => {
-        handleTokenCheck();
-    }, [])  // eslint-disable-next-line
+        handleTokenCheck()
+        // eslint-disable-next-line
+    }, [])
 
     function searchMovie() {
         setIsPreloaderVisible(true)
@@ -271,7 +274,8 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Main/>}/>
                         <Route path="/movies" element={
-                            <Movies
+                            <ProtectedRoute
+                                element={Movies}
                                 movies={movies}
                                 savedMovies={savedMovies}
                                 savedMoviesIds={savedMoviesIds}
@@ -286,10 +290,12 @@ function App() {
                                 movieCountPerPage={movieCountPerPage}
                                 currentPage={currentPage}
                                 setCurrentPage={setCurrentPage}
+                                loggedIn={loggedIn}
                             />
                         }/>
                         <Route path="/saved-movies" element={
-                            <SavedMovies
+                            <ProtectedRoute
+                                element={SavedMovies}
                                 movies={movies}
                                 savedMovies={savedMovies}
                                 savedMoviesIds={savedMoviesIds}
@@ -304,19 +310,23 @@ function App() {
                                 movieCountPerPage={movieCountPerPage}
                                 currentPage={currentPageSaved}
                                 setCurrentPage={setCurrentPageSaved}
+                                loggedIn={loggedIn}
                             />
                         }/>
                         <Route path="/profile" element={
-                            <Profile
-                                onLogout={onLogout}
+                            <ProtectedRoute
+                                element={Profile}
                                 email={email}
-                                setEmail={setEmail}
                                 name={name}
+                                onLogout={onLogout}
+                                setEmail={setEmail}
                                 setName={setName}
+                                loggedIn={loggedIn}
                             />
                         }/>
                         <Route path="/signin" element={<Login onLogin={onLogin}/>}/>
                         <Route path="/signup" element={<Register onRegister={onRegister}/>}/>
+                        <Route path="*" element={<NotFound />}/>
                     </Routes>
                 </main>
                 {isPreloaderVisible ? <Preloader/> : ""}
