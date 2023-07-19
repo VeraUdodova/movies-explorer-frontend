@@ -26,6 +26,8 @@ function App() {
     // количество карточек на "страницу" в мобильной версии
     const cardCountPerPageMobile = 5;
 
+    const [isTokenLoaded, setIsTokenLoaded] = useState(null);
+
     // окно с ошибкой
     const [isErrorOpen, setIsErrorOpen] = useState(false);
     // прелоадер
@@ -143,20 +145,24 @@ function App() {
         return message
     }
 
-    const handleTokenCheck = () => {
+    const handleTokenCheck = (redirectToMain = false) => {
         const token = localStorage.getItem("token")
 
         if (token) {
             mainApi.userInfo(token).then((user) => {
                 if (user._id) {
+                    setLoggedIn(true)
                     setEmail(user.email)
                     setCurrentUser(user)
-                    setLoggedIn(true)
+                    setIsTokenLoaded(true);
 
                     getSavedMovies()
 
-                    navigate("/", {replace: true})
+                    if (redirectToMain) {
+                        navigate("/", {replace: true})
+                    }
                 } else {
+                    setIsTokenLoaded(false);
                     handleLogOut()
                 }
             }).catch((err) => {
@@ -164,6 +170,8 @@ function App() {
                 handleLogOut()
                 catchError(err)
             })
+        } else {
+            setIsTokenLoaded(false);
         }
     }
 
@@ -177,7 +185,7 @@ function App() {
         setName(name)
         navigate("/movies", {replace: true})
 
-        handleTokenCheck()
+        handleTokenCheck(false)
     }
 
     function handleLogOut() {
@@ -236,14 +244,14 @@ function App() {
     }
 
     useEffect(() => {
-        handleTokenCheck()
+        handleTokenCheck(false)
         // eslint-disable-next-line
     }, [])
 
     function searchMovie() {
         setIsPreloaderVisible(true)
 
-        moviesApi.getMovies().then((data) =>{
+        moviesApi.getMovies().then((data) => {
             setIsPreloaderVisible(false)
             setMovies(data)
             getSavedMovies()
@@ -265,6 +273,10 @@ function App() {
         updateSize();
         return () => window.removeEventListener('resize', updateSize);
     });
+
+    if (isTokenLoaded === null) {
+        return (<Preloader/>)
+    }
 
     return (
         <div className="App">
@@ -326,7 +338,7 @@ function App() {
                         }/>
                         <Route path="/signin" element={<Login onLogin={onLogin}/>}/>
                         <Route path="/signup" element={<Register onRegister={onRegister}/>}/>
-                        <Route path="*" element={<NotFound />}/>
+                        <Route path="*" element={<NotFound/>}/>
                     </Routes>
                 </main>
                 {isPreloaderVisible ? <Preloader/> : ""}
