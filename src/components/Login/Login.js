@@ -1,27 +1,20 @@
-import {useState} from 'react';
+import {useEffect} from 'react';
 import {Link} from "react-router-dom";
 import "./Login.css";
+import {useFormWithValidation} from "../FormValidator/FormValidator";
 
 const Login = ({onLogin}) => {
-    const [formValue, setFormValue] = useState({
-        email: '',
-        password: ''
-    })
+    const {handleChange, formValues, formErrors, isValid, resetForm} = useFormWithValidation();
 
-    const handleChange = (e) => {
-        const {name, value} = e.target;
-
-        setFormValue({
-            ...formValue,
-            [name]: value
-        });
-    }
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (formValue.email && formValue.password){
-            onLogin(formValue.email, formValue.password)
-        }
+        onLogin(formValues)
     }
+
+    useEffect(() => {
+        resetForm()
+        // eslint-disable-next-line
+    }, [])
 
     return (
         <div className="login">
@@ -40,10 +33,12 @@ const Login = ({onLogin}) => {
                         id="email"
                         name="email"
                         type="email"
-                        className="login__form-input"
-                        value={formValue.email}
+                        className={`login__form-input ${formErrors.email ? "login__form-input-error" : ""}`}
+                        value={formValues.email || ""}
+                        autoComplete="off"
                         onChange={handleChange}
                     />
+                    <div className="login__form__errors">{formErrors.email}</div>
                     
                     <label className="login__form-label">Пароль</label>
                     <input
@@ -51,14 +46,20 @@ const Login = ({onLogin}) => {
                         id="password"
                         name="password"
                         type="password"
-                        className="login__form-input"
-                        value={formValue.password}
+                        className={`login__form-input ${formErrors.password ? "login__form-input-error" : ""}`}
+                        value={formValues.password || ""}
+                        autoComplete="off"
                         onChange={handleChange}
                     />
+                    <div className="login__form__errors">{formErrors.password}</div>
                 </div>
 
                 <div className="login__button-container">
-                    <button type="submit" className="login__button">Войти</button>
+                    <button
+                        type="submit"
+                        className="login__button"
+                        disabled={!isValid}
+                    >Войти</button>
 
                     <div className="login__signin">
                         Еще не зарегистрированы?

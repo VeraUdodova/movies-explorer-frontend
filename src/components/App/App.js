@@ -202,14 +202,14 @@ function App() {
         setIsErrorOpen(true)
     }
 
-    function handleRegistrationSuccess(email, password) {
-        onLogin(email, password)
+    function handleRegistrationSuccess({email, password}) {
+        onLogin({email, password})
     }
 
-    const onRegister = (name, email, password) => {
-        mainApi.signUp({name: name, email: email, password: password}).then((data) => {
+    const onRegister = ({name, email, password}) => {
+        mainApi.signUp({name, email, password}).then((data) => {
             data._id ?
-                handleRegistrationSuccess(email, password) :
+                handleRegistrationSuccess({email, password}) :
                 handleRegistrationFailed({"message": "Что-то пошло не так"})
         }).catch((err) => {
             catchError(err).then(data => handleRegistrationFailed(data))
@@ -221,8 +221,8 @@ function App() {
         setIsErrorOpen(true);
     }
 
-    const onLogin = (email, password) => {
-        mainApi.signIn({email: email, password: password}).then((data) => {
+    const onLogin = ({email, password}) => {
+        mainApi.signIn({email, password}).then((data) => {
             data.token ?
                 handleLoginSuccess(data) :
                 handleLoginFailed({"message": "Что-то пошло не так"})
