@@ -181,8 +181,8 @@ function App() {
         localStorage.setItem("token", token)
         setLoggedIn(true)
         setCurrentUser(data)
-        setEmail(email)
-        setName(name)
+        // setEmail(email)
+        // setName(name)
         navigate("/movies", {replace: true})
 
         handleTokenCheck(false)
@@ -191,8 +191,8 @@ function App() {
     function handleLogOut() {
         localStorage.removeItem("token")
         setLoggedIn(false)
-        setEmail("")
-        setName("")
+        // setEmail("")
+        // setName("")
         setCurrentUser({})
         navigate("/", {replace: true})
     }
@@ -226,6 +226,14 @@ function App() {
             data.token ?
                 handleLoginSuccess(data) :
                 handleLoginFailed({"message": "Что-то пошло не так"})
+        }).catch((err) => {
+            catchError(err).then(data => handleLoginFailed(data))
+        })
+    }
+
+    const onProfileSave = ({name, email}) => {
+        mainApi.saveUserInfo({name, email}).then((data) => {
+            setCurrentUser(data)
         }).catch((err) => {
             catchError(err).then(data => handleLoginFailed(data))
         })
@@ -288,57 +296,64 @@ function App() {
                         <Route path="/movies" element={
                             <ProtectedRoute
                                 element={Movies}
+                                loggedIn={loggedIn}
                                 movies={movies}
                                 savedMovies={savedMovies}
                                 savedMoviesIds={savedMoviesIds}
-                                onMovieLike={onMovieLike}
-                                searchMovie={searchMovie}
-                                setErrorMessage={setErrorMessage}
-                                setIsErrorOpen={setIsErrorOpen}
                                 searchFormSearchString={searchFormSearchString}
-                                setSearchFormSearchString={setSearchFormSearchString}
                                 searchFormFilter={searchFormFilter}
-                                setSearchFormFilter={setSearchFormFilter}
                                 movieCountPerPage={movieCountPerPage}
                                 currentPage={currentPage}
+                                onMovieLike={onMovieLike}
+                                searchMovie={searchMovie}
+                                setSearchFormSearchString={setSearchFormSearchString}
+                                setSearchFormFilter={setSearchFormFilter}
+                                setErrorMessage={setErrorMessage}
+                                setIsErrorOpen={setIsErrorOpen}
                                 setCurrentPage={setCurrentPage}
-                                loggedIn={loggedIn}
                             />
                         }/>
                         <Route path="/saved-movies" element={
                             <ProtectedRoute
                                 element={SavedMovies}
+                                loggedIn={loggedIn}
                                 movies={movies}
                                 savedMovies={savedMovies}
                                 savedMoviesIds={savedMoviesIds}
-                                onMovieLike={onMovieLike}
-                                searchMovie={searchMovie}
-                                setErrorMessage={setErrorMessage}
-                                setIsErrorOpen={setIsErrorOpen}
                                 searchFormSearchString={searchFormSearchString}
-                                setSearchFormSearchString={setSearchFormSearchString}
                                 searchFormFilter={searchFormFilter}
-                                setSearchFormFilter={setSearchFormFilter}
                                 movieCountPerPage={movieCountPerPage}
                                 currentPage={currentPageSaved}
+                                onMovieLike={onMovieLike}
+                                searchMovie={searchMovie}
+                                setSearchFormSearchString={setSearchFormSearchString}
+                                setSearchFormFilter={setSearchFormFilter}
+                                setErrorMessage={setErrorMessage}
+                                setIsErrorOpen={setIsErrorOpen}
                                 setCurrentPage={setCurrentPageSaved}
-                                loggedIn={loggedIn}
                             />
                         }/>
                         <Route path="/profile" element={
                             <ProtectedRoute
                                 element={Profile}
-                                email={email}
-                                name={name}
-                                onLogout={onLogout}
-                                setEmail={setEmail}
-                                setName={setName}
                                 loggedIn={loggedIn}
+                                onLogout={onLogout}
+                                onProfileSave={onProfileSave}
                             />
                         }/>
-                        <Route path="/signin" element={<Login onLogin={onLogin}/>}/>
-                        <Route path="/signup" element={<Register onRegister={onRegister}/>}/>
-                        <Route path="*" element={<NotFound/>}/>
+                        <Route path="/signin" element={
+                            <Login
+                                onLogin={onLogin}
+                            />
+                        }/>
+                        <Route path="/signup" element={
+                            <Register
+                                onRegister={onRegister}
+                            />
+                        }/>
+                        <Route path="*" element={
+                            <NotFound/>
+                        }/>
                     </Routes>
                 </main>
                 {isPreloaderVisible ? <Preloader/> : ""}

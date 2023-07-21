@@ -14,7 +14,7 @@ export class BaseApi {
 
     _add_token() {
         if (this._useToken) {
-            this._headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+            this._headers["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
         }
     }
 
@@ -41,34 +41,38 @@ export class BaseApi {
 
 class MainApi extends BaseApi {
     signIn(body) {
-        return this._save('/signin', 'POST', body)
+        return this._save("/signin", "POST", body)
     }
 
     signUp(body) {
-        return this._save('/signup', 'POST', body)
+        return this._save("/signup", "POST", body)
     }
 
     userInfo(token) {
-        return this._get('/users/me', token)
+        return this._get("/users/me", token)
+    }
+
+    saveUserInfo(body) {
+        return this._save("/users/me", "PATCH", body)
     }
 
     saveMovie(body) {
-        return this._save('/movies', 'POST', body)
+        return this._save("/movies", "POST", body)
     }
 
     deleteMovie(movieId) {
-        return this._save(`/movies/${movieId}`, 'DELETE')
+        return this._save(`/movies/${movieId}`, "DELETE")
     }
 
     getSavedMovies() {
-        return this._get('/movies')
+        return this._get("/movies")
     }
 }
 
 export const mainApi = new MainApi({
-    baseUrl: 'https://api.filmopoisk.nomoredomains.rocks',
+    baseUrl: "https://api.filmopoisk.nomoredomains.rocks",
     headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
     },
     useToken: true
 });
