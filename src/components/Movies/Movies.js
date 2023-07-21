@@ -14,6 +14,7 @@ function Movies(props) {
                 setSearchFormFilter={props.setSearchFormFilter}
                 currentPage={props.currentPage}
                 setCurrentPage={props.setCurrentPage}
+                setIsMessageSuccess={props.setIsMessageSuccess}
             />
             <MoviesCardList
                 savedMoviesIds={props.savedMoviesIds}

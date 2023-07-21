@@ -28,6 +28,7 @@ function SearchForm(props) {
             props.searchMovie(formValue.film_name, formValue.short_movie)
             props.setCurrentPage(1)
         } else {
+            props.setIsMessageSuccess(false)
             props.setErrorMessage("Нужно ввести ключевое слово")
             props.setIsErrorOpen(true)
         }

@@ -5,7 +5,7 @@ import Header from "../Header/Header";
 import Login from "../Login/Login";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
-import Error from "../Error/Error";
+import Message from "../Message/Message";
 import Profile from "../Profile/Profile"
 import Register from "../Register/Register";
 import Preloader from "../Preloader/Preloader";
@@ -28,18 +28,16 @@ function App() {
 
     const [isTokenLoaded, setIsTokenLoaded] = useState(null);
 
-    // окно с ошибкой
-    const [isErrorOpen, setIsErrorOpen] = useState(false);
+    // окно
+    const [isMessageOpen, setIsMessageOpen] = useState(false);
+    // текст сообщения
+    const [textMessage, setTextMessage] = useState("");
+    // успешное сообщение
+    const [isMessageSuccess, setIsMessageSuccess] = useState(false);
     // прелоадер
     const [isPreloaderVisible, setIsPreloaderVisible] = useState(false);
-    // текст ошибки
-    const [errorMessage, setErrorMessage] = useState("");
     // пользователь или гость
     const [loggedIn, setLoggedIn] = useState(false);
-    // электронная почта пользователя
-    const [email, setEmail] = useState("");
-    // имя пользователя
-    const [name, setName] = useState("");
     // текущий пользователь
     const [currentUser, setCurrentUser] = useState({})
     // фильмы (поиск)
@@ -129,8 +127,8 @@ function App() {
         }
     }
 
-    function closeError() {
-        setIsErrorOpen(false);
+    function closeMessage() {
+        setIsMessageOpen(false);
     }
 
     function makeErrorMessage(data) {
@@ -152,7 +150,6 @@ function App() {
             mainApi.userInfo(token).then((user) => {
                 if (user._id) {
                     setLoggedIn(true)
-                    setEmail(user.email)
                     setCurrentUser(user)
                     setIsTokenLoaded(true);
 
@@ -176,13 +173,11 @@ function App() {
     }
 
     const handleLoginSuccess = (data) => {
-        const {token, name, email} = data;
+        const {token} = data;
 
         localStorage.setItem("token", token)
         setLoggedIn(true)
         setCurrentUser(data)
-        // setEmail(email)
-        // setName(name)
         navigate("/movies", {replace: true})
 
         handleTokenCheck(false)
@@ -191,15 +186,14 @@ function App() {
     function handleLogOut() {
         localStorage.removeItem("token")
         setLoggedIn(false)
-        // setEmail("")
-        // setName("")
         setCurrentUser({})
         navigate("/", {replace: true})
     }
 
     function handleRegistrationFailed(data) {
-        setErrorMessage(makeErrorMessage(data))
-        setIsErrorOpen(true)
+        setIsMessageSuccess(false)
+        setTextMessage(makeErrorMessage(data))
+        setIsMessageOpen(true)
     }
 
     function handleRegistrationSuccess({email, password}) {
@@ -217,8 +211,9 @@ function App() {
     }
 
     function handleLoginFailed(data) {
-        setErrorMessage(makeErrorMessage(data));
-        setIsErrorOpen(true);
+        setIsMessageSuccess(false)
+        setTextMessage(makeErrorMessage(data));
+        setIsMessageOpen(true);
     }
 
     const onLogin = ({email, password}) => {
@@ -234,17 +229,23 @@ function App() {
     const onProfileSave = ({name, email}) => {
         mainApi.saveUserInfo({name, email}).then((data) => {
             setCurrentUser(data)
+
+            setIsMessageSuccess(true)
+            setTextMessage("Профиль сохранен")
+            setIsMessageOpen(true)
+
         }).catch((err) => {
             catchError(err).then(data => handleLoginFailed(data))
         })
     }
 
     const handleApiError = () => {
-        setErrorMessage(
+        setIsMessageSuccess(false);
+        setTextMessage(
             "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер " +
             "недоступен. Подождите немного и попробуйте ещё раз"
         );
-        setIsErrorOpen(true);
+        setIsMessageOpen(true);
     }
 
     const onLogout = () => {
@@ -308,8 +309,9 @@ function App() {
                                 searchMovie={searchMovie}
                                 setSearchFormSearchString={setSearchFormSearchString}
                                 setSearchFormFilter={setSearchFormFilter}
-                                setErrorMessage={setErrorMessage}
-                                setIsErrorOpen={setIsErrorOpen}
+                                setErrorMessage={setTextMessage}
+                                setIsMessageSuccess={setIsMessageSuccess}
+                                setIsErrorOpen={setIsMessageOpen}
                                 setCurrentPage={setCurrentPage}
                             />
                         }/>
@@ -328,8 +330,9 @@ function App() {
                                 searchMovie={searchMovie}
                                 setSearchFormSearchString={setSearchFormSearchString}
                                 setSearchFormFilter={setSearchFormFilter}
-                                setErrorMessage={setErrorMessage}
-                                setIsErrorOpen={setIsErrorOpen}
+                                setErrorMessage={setTextMessage}
+                                setIsMessageSuccess={setIsMessageSuccess}
+                                setIsErrorOpen={setIsMessageOpen}
                                 setCurrentPage={setCurrentPageSaved}
                             />
                         }/>
@@ -358,10 +361,11 @@ function App() {
                 </main>
                 {isPreloaderVisible ? <Preloader/> : ""}
                 <Footer loggedIn={loggedIn}/>
-                <Error
-                    isOpen={isErrorOpen}
-                    onClose={closeError}
-                    message={errorMessage}
+                <Message
+                    isOpen={isMessageOpen}
+                    onClose={closeMessage}
+                    message={textMessage}
+                    isMessageSuccess={isMessageSuccess}
                 />
             </CurrentUserContext.Provider>
         </div>
