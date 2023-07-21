@@ -46,6 +46,10 @@
     padding: 0 0 0 10px;
 }
 
+.searchform__input-error {
+    color: red;
+}
+
 .searchform__input::placeholder {
     color: #A0A0A0;
 }
@@ -68,7 +72,12 @@
     border: none;
     background-color: transparent;
 }
-.searchform__button:hover{
+
+.searchform__button:disabled {
+    background-image: url(../../images/search-button-disabled.svg);
+}
+
+.searchform__button:hover {
     opacity: 0.8;
     cursor: pointer;
 }

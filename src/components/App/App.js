@@ -263,7 +263,6 @@ function App() {
         moviesApi.getMovies().then((data) => {
             setIsPreloaderVisible(false)
             setMovies(data)
-            getSavedMovies()
         }).catch((err) => {
             setIsPreloaderVisible(false)
             catchError(err)

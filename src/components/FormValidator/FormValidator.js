@@ -8,9 +8,9 @@ export function useFormWithValidation() {
 
     const handleChange = (event) => {
         const target = event.target;
-        const {name, value} = target;
+        const {name, value, type, checked} = target;
 
-        setFormValues({...formValues, [name]: value});
+        setFormValues({...formValues, [name]: type === "checkbox" ? checked : value});
         setFormErrors({...formErrors, [name]: target.validationMessage});
         setIsValid(target.closest("form").checkValidity());
     };

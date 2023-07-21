@@ -6,15 +6,12 @@ function Movies(props) {
         <>
             <SearchForm
                 searchMovie={props.searchMovie}
-                setErrorMessage={props.setErrorMessage}
-                setIsErrorOpen={props.setIsErrorOpen}
                 searchFormSearchString={props.searchFormSearchString}
                 setSearchFormSearchString={props.setSearchFormSearchString}
                 searchFormFilter={props.searchFormFilter}
                 setSearchFormFilter={props.setSearchFormFilter}
                 currentPage={props.currentPage}
                 setCurrentPage={props.setCurrentPage}
-                setIsMessageSuccess={props.setIsMessageSuccess}
             />
             <MoviesCardList
                 savedMoviesIds={props.savedMoviesIds}

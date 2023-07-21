@@ -1,37 +1,30 @@
-import {useState} from "react";
+import {useEffect} from "react";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox"
+import {useFormWithValidation} from "../FormValidator/FormValidator";
 import "./SearchForm.css";
 
 function SearchForm(props) {
-    const [formValue, setFormValue] = useState({
-        film_name: '',
-        short_movie: ''
-    })
+    const {handleChange, formValues, formErrors, isValid, resetForm} = useFormWithValidation();
 
-    const handleChange = (e) => {
-        const {name, value} = e.target;
-
-        setFormValue({
-            ...formValue,
-            [name]: value
-        });
-    }
+    useEffect(() => {
+        resetForm()
+        // eslint-disable-next-line
+    }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (formValue.film_name) {
-            console.log(formValue.short_movie)
+        const values = Object.assign({
+            film_name: props.searchFormSearchString,
+            short_movie: props.searchFormFilter
+        }, {}, formValues
+        )
 
-            props.setSearchFormSearchString(formValue.film_name)
-            props.setSearchFormFilter(formValue.short_movie)
-            props.searchMovie(formValue.film_name, formValue.short_movie)
-            props.setCurrentPage(1)
-        } else {
-            props.setIsMessageSuccess(false)
-            props.setErrorMessage("Нужно ввести ключевое слово")
-            props.setIsErrorOpen(true)
-        }
+        props.setSearchFormSearchString(values.film_name)
+        props.setSearchFormFilter(values.short_movie)
+
+        props.searchMovie()
+        props.setCurrentPage(1)
     }
 
     return (
@@ -39,18 +32,25 @@ function SearchForm(props) {
             <div className="searchform__block">
                 <div className="searchform__icon"></div>
                 <input
-                    className="searchform__input"
+                    className={`searchform__input ${formErrors.name ? "searchform__input-error" : ""}`}
                     placeholder="Фильм"
                     name="film_name"
-                    value={formValue.film_name}
+                    value={formValues.film_name || props.searchFormSearchString}
+                    autoComplete="off"
+                    defaultValue={props.searchFormSearchString}
+                    required={true}
                     onChange={handleChange}
                 />
-                <button type="submit" className="searchform__button">
+                <button
+                    type="submit"
+                    className="searchform__button"
+                    disabled={!isValid}
+                >
                 </button>
             </div>
             <div className="searchform__block searchform__block-filter">
                 <span className="searchform__line"></span>
-                <FilterCheckbox title="Короткометражки" onChange={handleChange}/>
+                <FilterCheckbox title="Короткометражки" handleChange={handleChange}/>
             </div>
         </form>
     )

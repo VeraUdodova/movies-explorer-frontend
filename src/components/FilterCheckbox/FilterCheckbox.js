@@ -1,21 +1,13 @@
-import {useState} from "react"
 import "./FilterCheckbox.css"
 
 function FilterCheckbox(props) {
-    const [checked, setChecked] = useState(false);
-
-    const handleChangeCheckbox = () => {
-        setChecked(!checked)
-    }
-
     return (
         <div className="filtercheckbox">
             <input
                 type="checkbox"
-                name="short_movies"
+                name="short_movie"
                 className="filtercheckbox__checkbox"
-                defaultChecked={checked}
-                onClick={handleChangeCheckbox}
+                onChange={props.handleChange}
             />
             <p className="filtercheckbox__title">{props.title}</p>
         </div>
