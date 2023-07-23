@@ -23,6 +23,7 @@ import {
     MOVIE_SITE,
     RESIZE_TIMEOUT, SHORT_MOVIE_DURATION, STORAGE_NAME_FILMS, STORAGE_NAME_TOKEN
 } from "../../utils/constants"
+import movies from "../Movies/Movies";
 
 function App() {
     const navigate = useNavigate();
@@ -61,37 +62,20 @@ function App() {
     const [savedMoviesIds, setSavedMoviesIds] = useState([]);
     const [reloadMovies, setReloadMovies] = useState(false);
     const [visibleMovies, setVisibleMovies] = useState([]);
+    const [visibleSavedMovies, setVisibleSavedMovies] = useState([]);
 
-    // const getSaveMoviesIds = function (data) {
-    //     setSavedMoviesIds(data.length > 0 ? data.map(item => item.id) : [])
-    // }
-    //
-    // const getSavedMovies = function () {
-    //     mainApi.getSavedMovies().then(data => {
-    //         if (data) {
-    //             data = data.map(item => {
-    //                 item.id = item.movieId
-    //                 return item
-    //             })
-    //         }
-    //         setSavedMovies(data)
-    //         getSaveMoviesIds(data)
-    //
-    //         if (movies && data) {
-    //             const _data = movies.map(movie => {
-    //                 const item1 = data.filter(item0 => item0.id === movie.id)
-    //                 movie._id = item1 && item1.length > 0 ? item1[0]._id : undefined
-    //                 return movie
-    //             })
-    //
-    //             setMovies(_data)
-    //         }
-    //
-    //     }).catch(err => {
-    //         handleApiError()
-    //         catchError(err)
-    //     })
-    // }
+    const getSaveMoviesIds = function (data) {
+        setSavedMoviesIds(data.length > 0 ? data.map(item => item.id) : [])
+    }
+
+    const getSavedMovies = function () {
+        mainApi.getSavedMovies().then(data => {
+            setSavedMoviesIds(data.length > 0 ? data.map(item => item.movieId) : [])
+        }).catch(err => {
+            handleApiError()
+            catchError(err)
+        })
+    }
 
     const onMovieLike = function (movie) {
         const isLiked = savedMoviesIds.includes(movie.id)
@@ -114,6 +98,7 @@ function App() {
 
             mainApi.saveMovie(body).then(obj => {
                 // getSavedMovies()
+                setSavedMoviesIds([...savedMoviesIds, obj.movieId])
             }).catch((err) => {
                 handleApiError()
                 catchError(err)
@@ -123,6 +108,7 @@ function App() {
                 handleApiError()
             } else {
                 mainApi.deleteMovie(movie._id).then(obj => {
+                    setSavedMoviesIds(savedMoviesIds.filter(item => item !== movie.movieId))
                     // getSavedMovies()
                 }).catch((err) => {
                     handleApiError()
@@ -157,8 +143,7 @@ function App() {
                     setLoggedIn(true)
                     setCurrentUser(user)
                     setIsTokenLoaded(true);
-
-                    // getSavedMovies()
+                    getSavedMovies()
 
                     if (redirectToMain) {
                         navigate("/", {replace: true})
@@ -287,6 +272,17 @@ function App() {
             }))
     }
 
+    useEffect(() => {
+        if (moviesLoaded === false) {
+            return
+        }
+
+        const {movies} = loadMoviesFromStorage();
+
+        setVisibleSavedMovies(movies.filter(item => savedMoviesIds.includes(item.id)))
+
+    }, [moviesLoaded, savedMoviesIds])
+
     function loadMovies() {
         const {movies} = loadMoviesFromStorage()
 
@@ -305,6 +301,8 @@ function App() {
             // setMovies(data)
             setMoviesLoaded(true)
             setReloadMovies(false)
+
+            // setVisibleSavedMovies()
 
         }).catch((err) => {
             setIsPreloaderVisible(false)
@@ -327,6 +325,7 @@ function App() {
 
     useEffect(() => {
         setReloadMovies(true)
+        getSavedMovies()
     }, [moviesLoaded])
 
     useEffect(() => {
@@ -423,7 +422,7 @@ function App() {
                                 element={Movies}
                                 loggedIn={loggedIn}
                                 savedMoviesFlag={true}
-                                visibleMovies={visibleMovies}
+                                visibleMovies={visibleSavedMovies}
                                 savedMoviesIds={savedMoviesIds}
                                 currentPage={currentPage}
                                 maxPage={maxPage}
@@ -433,9 +432,9 @@ function App() {
                                 setReloadMovies={setReloadMovies}
                                 loadMoviesFromStorage={loadMoviesFromStorage}
 
-                                searchFormSearchString={searchFormSearchString}
+                                searchFormSearchString=""
                                 setSearchFormSearchString={setSearchFormSearchString}
-                                searchFormFilter={searchFormFilter}
+                                searchFormFilter={false}
                                 setSearchFormFilter={setSearchFormFilter}
 
                                 setTextMessage={setTextMessage}

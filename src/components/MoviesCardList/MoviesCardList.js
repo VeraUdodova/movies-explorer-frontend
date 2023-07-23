@@ -22,8 +22,12 @@ function MoviesCardList(props) {
     }
 
     useEffect(() => {
-        setButtonVisible(currentPage < maxPage)
+        setButtonVisible(!savedMoviesFlag && currentPage < maxPage)
     }, [currentPage, maxPage])
+
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [])
 
     return (
         <section className="movies">

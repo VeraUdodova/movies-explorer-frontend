@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox"
 import {useFormWithValidation} from "../FormValidator/FormValidator";
 import "./SearchForm.css";
@@ -11,37 +11,64 @@ function SearchForm(props) {
         setSearchFormFilter,
         setReloadMovies,
         loadMoviesFromStorage,
-        searchFormFilter
+        searchFormFilter,
+        savedMoviesFlag
     } = props;
 
-    useEffect(() => {
-        const {searchFilmName, searchShortMovie} = loadMoviesFromStorage()
+    const [value, setValue] = useState("")
 
-        setFormValues({
-            film_name: searchFilmName,
-            short_movie: searchShortMovie === true
-        })
-        setSearchFormFilter(searchShortMovie === true)
+    useEffect(() => {
+        if (!savedMoviesFlag) {
+            const {searchFilmName, searchShortMovie} = loadMoviesFromStorage()
+
+            setFormValues({
+                film_name: searchFilmName,
+                short_movie: searchShortMovie === true
+            })
+            setSearchFormFilter(searchShortMovie === true)
+            setValue(searchFilmName)
+        } else {
+            setFormValues({
+                film_name: "",
+                short_movie: false
+            })
+            setValue("")
+        }
         // eslint-disable-next-line
     }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setReloadMovies(true)
-        setCurrentPage(1)
+
+        if (!savedMoviesFlag) {
+            setReloadMovies(true)
+            setCurrentPage(1)
+        }
+    }
+    const handleChangeInput = (e) => {
+        setValue(e.target.value)
+        setFormValues({...formValues, film_name: value})
+
+        handleChange(e)
     }
 
     const handleChangeFilter = (e) => {
         handleChange(e)
-        setSearchFormFilter(formValues.short_movie === true)
+        if (!savedMoviesFlag) {
+            setSearchFormFilter(formValues.short_movie === true)
+        }
     }
 
     useEffect(() => {
-        setSearchFormSearchString(formValues.film_name)
+        if (!savedMoviesFlag) {
+            setSearchFormSearchString(formValues.film_name)
+        }
     }, [formValues.film_name, props])
 
     useEffect(() => {
-        setSearchFormFilter(formValues.short_movie)
+        if (!savedMoviesFlag) {
+            setSearchFormFilter(formValues.short_movie)
+        }
     }, [formValues.short_movie, props])
 
     return (
@@ -53,9 +80,9 @@ function SearchForm(props) {
                     name="film_name"
                     type="text"
                     className={`searchform__input ${formErrors.name ? "searchform__input-error" : ""}`}
-                    value={formValues.film_name}
+                    value={value}
                     autoComplete="off"
-                    onChange={handleChange}
+                    onChange={handleChangeInput}
                     placeholder="Фильм"
                 />
                 <button type="submit" className="searchform__button"></button>
@@ -65,6 +92,7 @@ function SearchForm(props) {
                 <FilterCheckbox
                     title="Короткометражки"
                     handleChange={handleChangeFilter}
+                    name="short_movie"
                     searchFormFilter={searchFormFilter}/>
             </div>
         </form>

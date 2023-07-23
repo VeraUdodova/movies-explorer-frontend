@@ -3,9 +3,10 @@ import SearchForm from "../SearchForm/SearchForm";
 
 function Movies(props) {
     return (
-        <>
+        <div key={props.savedMoviesFlag}>
             <SearchForm
                 loadMovies={props.loadMovies}
+                savedMoviesFlag={props.savedMoviesFlag}
                 searchFormSearchString={props.searchFormSearchString}
                 setSearchFormSearchString={props.setSearchFormSearchString}
                 searchFormFilter={props.searchFormFilter}
@@ -26,7 +27,7 @@ function Movies(props) {
                 setReloadMovies={props.setReloadMovies}
                 loadMoviesFromStorage={props.loadMoviesFromStorage}
             />
-        </>
+        </div>
     )
 }
 

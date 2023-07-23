@@ -1,16 +1,30 @@
 import "./FilterCheckbox.css"
+import {useEffect, useState} from "react";
 
 function FilterCheckbox(props) {
-    const {handleChange, title, searchFormFilter} = props;
+    const {handleChange, title, name, searchFormFilter} = props;
+
+    const [value, setValue] = useState(false)
+
+    useEffect(() => {
+        setValue(searchFormFilter === true)
+    }, [])
+
+    const handleChangeCheckbox = (e) => {
+        setValue(e.target.checked)
+        handleChange(e)
+    }
+
 
     return (
         <div className="filtercheckbox">
             <input
                 type="checkbox"
-                name="short_movie"
+                id={name}
+                name={name}
                 className="filtercheckbox__checkbox"
-                onChange={handleChange}
-                checked={searchFormFilter}
+                onChange={handleChangeCheckbox}
+                checked={value}
             />
             <p className="filtercheckbox__title">{title}</p>
         </div>

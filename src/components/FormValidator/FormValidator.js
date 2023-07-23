@@ -1,6 +1,5 @@
 import {useCallback, useState} from "react";
 
-//хук управления формой и валидации формы
 export function useFormWithValidation() {
     const [formValues, setFormValues] = useState({});
     const [formErrors, setFormErrors] = useState({});

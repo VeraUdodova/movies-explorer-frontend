@@ -1,13 +1,13 @@
 import "./MoviesCard.css";
 
 function MoviesCard(props) {
-    const {movie, savedMoviesIds} = props;
+    const {movie, savedMoviesIds, onMovieLike} = props;
     const minutes = movie.duration % 60
     const hours = Math.floor(movie.duration / 60)
     const duration = ((hours > 0 ? `${hours}ч ` : "") + (minutes > 0 ? `${minutes}м` : "")).trim()
 
-    const onMovieLike = function () {
-        props.onMovieLike(movie);
+    const onMovieLikeLocal = function () {
+        onMovieLike(movie);
     }
 
     const openTrailer = function () {
@@ -26,7 +26,7 @@ function MoviesCard(props) {
                 <img className="moviecard__thumbnail" src={movie.image.url ? `https://api.nomoreparties.co${movie.image.url}` : movie.image} alt={movie.nameRU}/>
             </div>
             <button
-                onClick={onMovieLike}
+                onClick={onMovieLikeLocal}
                 className={
                 `moviecard__icon 
                 ${
