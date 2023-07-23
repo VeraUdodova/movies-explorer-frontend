@@ -13,6 +13,7 @@ function Movies(props) {
                 currentPage={props.currentPage}
                 setCurrentPage={props.setCurrentPage}
                 setReloadMovies={props.setReloadMovies}
+                loadMoviesFromStorage={props.loadMoviesFromStorage}
             />
             <MoviesCardList
                 savedMoviesIds={props.savedMoviesIds}
@@ -23,6 +24,7 @@ function Movies(props) {
                 maxPage={props.maxPage}
                 setCurrentPage={props.setCurrentPage}
                 setReloadMovies={props.setReloadMovies}
+                loadMoviesFromStorage={props.loadMoviesFromStorage}
             />
         </>
     )

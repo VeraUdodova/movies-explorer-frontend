@@ -4,24 +4,30 @@ import {useFormWithValidation} from "../FormValidator/FormValidator";
 import "./SearchForm.css";
 
 function SearchForm(props) {
-    const {handleChange, formValues, formErrors, isValid, resetForm} = useFormWithValidation();
+    const {handleChange, formValues, formErrors, setFormValues} = useFormWithValidation();
     const {
-        loadMovies,
         setCurrentPage,
         setSearchFormSearchString,
         setSearchFormFilter,
-        setReloadMovies
+        setReloadMovies,
+        loadMoviesFromStorage,
+        searchFormFilter
     } = props;
 
     useEffect(() => {
-        resetForm()
+        const {searchFilmName, searchShortMovie} = loadMoviesFromStorage()
+
+        setFormValues({
+            film_name: searchFilmName,
+            short_movie: searchShortMovie === true
+        })
+        setSearchFormFilter(searchShortMovie === true)
         // eslint-disable-next-line
     }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setReloadMovies(true)
-        loadMovies()
         setCurrentPage(1)
     }
 
@@ -47,22 +53,19 @@ function SearchForm(props) {
                     name="film_name"
                     type="text"
                     className={`searchform__input ${formErrors.name ? "searchform__input-error" : ""}`}
-                    value={formValues.film_name || ""}
+                    value={formValues.film_name}
                     autoComplete="off"
-                    // defaultValue={searchFormSearchString}
                     onChange={handleChange}
                     placeholder="Фильм"
                 />
-                <button
-                    type="submit"
-                    className="searchform__button"
-                    disabled={!isValid}
-                >
-                </button>
+                <button type="submit" className="searchform__button"></button>
             </div>
             <div className="searchform__block searchform__block-filter">
                 <span className="searchform__line"></span>
-                <FilterCheckbox title="Короткометражки" handleChange={handleChangeFilter}/>
+                <FilterCheckbox
+                    title="Короткометражки"
+                    handleChange={handleChangeFilter}
+                    searchFormFilter={searchFormFilter}/>
             </div>
         </form>
     )

@@ -1,15 +1,18 @@
 import "./FilterCheckbox.css"
 
 function FilterCheckbox(props) {
+    const {handleChange, title, searchFormFilter} = props;
+
     return (
         <div className="filtercheckbox">
             <input
                 type="checkbox"
                 name="short_movie"
                 className="filtercheckbox__checkbox"
-                onChange={props.handleChange}
+                onChange={handleChange}
+                checked={searchFormFilter}
             />
-            <p className="filtercheckbox__title">{props.title}</p>
+            <p className="filtercheckbox__title">{title}</p>
         </div>
     );
 }

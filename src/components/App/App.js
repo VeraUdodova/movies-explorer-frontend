@@ -270,7 +270,7 @@ function App() {
             return {
                 movies: [],
                 searchFilmName: "",
-                searchShortMovie: ""
+                searchShortMovie: false
             }
         }
 
@@ -281,31 +281,36 @@ function App() {
         localStorage.setItem(
             STORAGE_NAME_FILMS,
             JSON.stringify({
-                movies,
-                searchFilmName,
-                searchShortMovie
+                movies: movies || [],
+                searchFilmName: searchFilmName || "",
+                searchShortMovie: searchShortMovie || false
             }))
     }
 
     function loadMovies() {
         const {movies} = loadMoviesFromStorage()
 
-        if (movies.length === 0) {
-            setIsPreloaderVisible(true)
-
-            moviesApi.getMovies().then((data) => {
-                setIsPreloaderVisible(false)
-                // setMovies(data)
-                setMoviesLoaded(true)
-                saveMoviesToStorage(data, searchFormSearchString, searchFormFilter)
-            }).catch((err) => {
-                setIsPreloaderVisible(false)
-                catchError(err)
-                handleApiError()
-            })
-        } else {
+        if (movies.length > 0) {
             setMoviesLoaded(true)
+            setReloadMovies(false)
+
+            return
         }
+
+        setIsPreloaderVisible(true)
+
+        moviesApi.getMovies().then((data) => {
+            setIsPreloaderVisible(false)
+            saveMoviesToStorage(data, searchFormSearchString, searchFormFilter)
+            // setMovies(data)
+            setMoviesLoaded(true)
+            setReloadMovies(false)
+
+        }).catch((err) => {
+            setIsPreloaderVisible(false)
+            catchError(err)
+            handleApiError()
+        })
     }
 
     useEffect(() => {
@@ -324,8 +329,12 @@ function App() {
         setReloadMovies(true)
     }, [moviesLoaded])
 
-
     useEffect(() => {
+        if (moviesLoaded !== true) {
+            loadMovies()
+            return
+        }
+
         if (!reloadMovies) {
             return;
         }
@@ -347,6 +356,8 @@ function App() {
         if (searchFormFilter === true) {
             preVisibleMovies = preVisibleMovies.filter(movie => movie.duration <= SHORT_MOVIE_DURATION)
         }
+
+        saveMoviesToStorage(movies, searchFormSearchString, searchFormFilter === true)
 
         const visibleMovies = preVisibleMovies.length > 0 ? preVisibleMovies.slice(0, movieCountPerPage * currentPage) : []
         setMaxPage(Math.ceil(preVisibleMovies.length / movieCountPerPage));
@@ -395,6 +406,7 @@ function App() {
                                 loadMovies={loadMovies}
                                 setCurrentPage={setCurrentPage}
                                 setReloadMovies={setReloadMovies}
+                                loadMoviesFromStorage={loadMoviesFromStorage}
 
                                 searchFormSearchString={searchFormSearchString}
                                 setSearchFormSearchString={setSearchFormSearchString}
@@ -419,6 +431,7 @@ function App() {
                                 loadMovies={loadMovies}
                                 setCurrentPage={setCurrentPage}
                                 setReloadMovies={setReloadMovies}
+                                loadMoviesFromStorage={loadMoviesFromStorage}
 
                                 searchFormSearchString={searchFormSearchString}
                                 setSearchFormSearchString={setSearchFormSearchString}
