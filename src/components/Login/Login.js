@@ -19,7 +19,7 @@ const Login = ({onLogin}) => {
     return (
         <div className="login">
             <div className="login__top">
-                <div className="login__logo"></div>
+                <Link to="/" className="login__logo"></Link>
                 <p className="login__welcome">
                     Рады видеть!
                 </p>

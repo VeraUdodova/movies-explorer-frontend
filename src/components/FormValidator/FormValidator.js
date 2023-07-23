@@ -6,12 +6,21 @@ export function useFormWithValidation() {
     const [formErrors, setFormErrors] = React.useState({});
     const [isValid, setIsValid] = React.useState(false);
 
+    const isValidEmail = (email) => {
+        return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email);
+    }
+
     const handleChange = (event) => {
         const target = event.target;
         const {name, value, type, checked} = target;
+        let validationMessage = target.validationMessage;
+
+        if (type === "email" && validationMessage === "") {
+            validationMessage = !isValidEmail(value) ? "Адрес электронной почты некорректен" : "";
+        }
 
         setFormValues({...formValues, [name]: type === "checkbox" ? checked : value});
-        setFormErrors({...formErrors, [name]: target.validationMessage});
+        setFormErrors({...formErrors, [name]: validationMessage});
         setIsValid(target.closest("form").checkValidity());
     };
 

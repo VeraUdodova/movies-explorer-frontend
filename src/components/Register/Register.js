@@ -19,7 +19,7 @@ const Register = ({onRegister}) => {
     return (
         <div className="register">
             <div className="register__top">
-                <div className="register__logo"></div>
+                <Link to="/" className="register__logo"></Link>
                 <p className="register__welcome">
                     Добро пожаловать!
                 </p>
