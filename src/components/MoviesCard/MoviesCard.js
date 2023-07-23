@@ -1,11 +1,9 @@
 import "./MoviesCard.css";
-import {SHORT_MOVIE_DURATION} from "../../utils/constants";
 
 function MoviesCard(props) {
     const {movie, savedMoviesIds} = props;
-
-    const minutes = movie.duration % SHORT_MOVIE_DURATION
-    const hours = Math.floor(movie.duration / SHORT_MOVIE_DURATION)
+    const minutes = movie.duration % 60
+    const hours = Math.floor(movie.duration / 60)
     const duration = ((hours > 0 ? `${hours}ч ` : "") + (minutes > 0 ? `${minutes}м` : "")).trim()
 
     const onMovieLike = function () {

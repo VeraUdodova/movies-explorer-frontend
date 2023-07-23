@@ -5,48 +5,42 @@ import "./MoviesCardList.css";
 function MoviesCardList(props) {
     const [buttonVisible, setButtonVisible] = useState(false);
 
+    const {
+        setCurrentPage,
+        currentPage,
+        visibleMovies,
+        savedMoviesIds,
+        savedMoviesFlag,
+        onMovieLike,
+        maxPage,
+        setReloadMovies
+    } = props;
+
     const nextPage = function () {
-        props.setCurrentPage(props.currentPage + 1)
+        setCurrentPage(currentPage + 1)
+        setReloadMovies(true)
     }
-
-    let movies = []
-
-    if (!props.savedMoviesFlag) {
-        const short = props.searchFormFilter === true
-        movies = props.movies.filter(
-            (movie) => {
-                return (
-                    movie.nameRU.toLowerCase().includes(props.searchFormSearchString.toLowerCase())
-                ) && (
-                    (short && movie.duration <= 40) || !short
-                )
-            }
-        )
-    } else {
-        movies = props.savedMovies
-    }
-    const moviesSliced = movies.length > 0 ? movies.slice(0, props.movieCountPerPage * props.currentPage) : []
 
     useEffect(() => {
-        setButtonVisible(movies.length > props.currentPage * props.movieCountPerPage)
-    }, [props.currentPage, movies.length, props.movieCountPerPage])
+        setButtonVisible(currentPage < maxPage)
+    }, [currentPage, maxPage])
 
     return (
         <section className="movies">
             {
-                moviesSliced.length === 0 ?
+                visibleMovies.length === 0 ?
                     <div className="movies__zero">
                         Фильмы отсутствуют
                     </div>
                     :
                     <>
-                        {moviesSliced.map(movie => (
+                        {visibleMovies.map(movie => (
                             <MoviesCard
                                 key={movie.id || movie._id}
                                 movie={movie}
-                                savedMoviesIds={props.savedMoviesIds}
-                                savedMoviesFlag={props.savedMoviesFlag}
-                                onMovieLike={props.onMovieLike}
+                                savedMoviesIds={savedMoviesIds}
+                                savedMoviesFlag={savedMoviesFlag}
+                                onMovieLike={onMovieLike}
                             />))}
                         {
                             buttonVisible ?

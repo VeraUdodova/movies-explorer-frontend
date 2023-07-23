@@ -1,25 +1,26 @@
-import React, {useCallback} from "react";
+import {useCallback, useState} from "react";
 
 //хук управления формой и валидации формы
 export function useFormWithValidation() {
-    const [formValues, setFormValues] = React.useState({});
-    const [formErrors, setFormErrors] = React.useState({});
-    const [isValid, setIsValid] = React.useState(false);
-
-    const isValidEmail = (email) => {
-        return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email);
-    }
+    const [formValues, setFormValues] = useState({});
+    const [formErrors, setFormErrors] = useState({});
+    const [isValid, setIsValid] = useState(false);
 
     const handleChange = (event) => {
         const target = event.target;
-        const {name, value, type, checked} = target;
+        const {name, type, checked} = target;
+        let {value} = target;
         let validationMessage = target.validationMessage;
 
-        if (type === "email" && validationMessage === "") {
-            validationMessage = !isValidEmail(value) ? "Адрес электронной почты некорректен" : "";
+        if (type === "email" && validationMessage === "" && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
+            validationMessage = "Адрес электронной почты некорректен"
         }
 
-        setFormValues({...formValues, [name]: type === "checkbox" ? checked : value});
+        if (type === "checkbox") {
+            value = checked
+        }
+
+        setFormValues({...formValues, [name]: value});
         setFormErrors({...formErrors, [name]: validationMessage});
         setIsValid(target.closest("form").checkValidity());
     };

@@ -5,26 +5,24 @@ function Movies(props) {
     return (
         <>
             <SearchForm
-                searchMovie={props.searchMovie}
+                loadMovies={props.loadMovies}
                 searchFormSearchString={props.searchFormSearchString}
                 setSearchFormSearchString={props.setSearchFormSearchString}
                 searchFormFilter={props.searchFormFilter}
                 setSearchFormFilter={props.setSearchFormFilter}
                 currentPage={props.currentPage}
                 setCurrentPage={props.setCurrentPage}
+                setReloadMovies={props.setReloadMovies}
             />
             <MoviesCardList
                 savedMoviesIds={props.savedMoviesIds}
-                savedMoviesFlag={false}
-                savedMovies={props.savedMovies}
-                movies={props.movies}
+                savedMoviesFlag={props.savedMoviesFlag}
+                visibleMovies={props.visibleMovies}
                 onMovieLike={props.onMovieLike}
-                searchParams={props.searchParams}
-                searchFormSearchString={props.searchFormSearchString}
-                searchFormFilter={props.searchFormFilter}
                 currentPage={props.currentPage}
+                maxPage={props.maxPage}
                 setCurrentPage={props.setCurrentPage}
-                movieCountPerPage={props.movieCountPerPage}
+                setReloadMovies={props.setReloadMovies}
             />
         </>
     )

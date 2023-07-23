@@ -6,16 +6,14 @@ function SavedMovies(props) {
         <>
             <SearchForm
                 searchMovie={props.searchMovie}
-                searchFormSearchString={props.searchFormSearchString}
                 setSearchFormSearchString={props.setSearchFormSearchString}
-                searchFormFilter={props.searchFormFilter}
                 setSearchFormFilter={props.setSearchFormFilter}
-                currentPage={props.currentPage}
                 setCurrentPage={props.setCurrentPage}
+                setSearchSubmit={props.setSearchSubmit}
             />
             <MoviesCardList
                 savedMoviesIds={props.savedMoviesIds}
-                savedMoviesFlag={true}
+                savedMoviesFlag={props.savedMoviesFlag}
                 savedMovies={props.savedMovies}
                 movies={props.movies}
                 onMovieLike={props.onMovieLike}
@@ -25,6 +23,7 @@ function SavedMovies(props) {
                 currentPage={props.currentPage}
                 setCurrentPage={props.setCurrentPage}
                 movieCountPerPage={props.movieCountPerPage}
+                setSearchSubmit={props.setSearchSubmit}
             />
         </>
     )

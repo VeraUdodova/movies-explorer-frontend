@@ -1,5 +1,5 @@
 module.exports = {
-    SHORT_MOVIE_DURATION: 60,
+    SHORT_MOVIE_DURATION: 40,
     // количество карточек на "страницу"
     CARD_COUNT_PER_PAGE: 7,
     // количество карточек на "страницу" в мобильной версии
@@ -9,5 +9,6 @@ module.exports = {
     MOBILE_WIDTH: 600,
     FILMOPOISK_API: "https://api.filmopoisk.nomoredomains.rocks",
     RESIZE_TIMEOUT: 5000,
-    TOKEN_NAME: "token"
+    STORAGE_NAME_TOKEN: "token",
+    STORAGE_NAME_FILMS: "films"
 }

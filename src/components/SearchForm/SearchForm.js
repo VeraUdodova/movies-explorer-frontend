@@ -5,6 +5,13 @@ import "./SearchForm.css";
 
 function SearchForm(props) {
     const {handleChange, formValues, formErrors, isValid, resetForm} = useFormWithValidation();
+    const {
+        loadMovies,
+        setCurrentPage,
+        setSearchFormSearchString,
+        setSearchFormFilter,
+        setReloadMovies
+    } = props;
 
     useEffect(() => {
         resetForm()
@@ -13,33 +20,38 @@ function SearchForm(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        const values = Object.assign({
-            film_name: props.searchFormSearchString,
-            short_movie: props.searchFormFilter
-        }, {}, formValues
-        )
-
-        props.setSearchFormSearchString(values.film_name)
-        props.setSearchFormFilter(values.short_movie)
-
-        props.searchMovie()
-        props.setCurrentPage(1)
+        setReloadMovies(true)
+        loadMovies()
+        setCurrentPage(1)
     }
+
+    const handleChangeFilter = (e) => {
+        handleChange(e)
+        setSearchFormFilter(formValues.short_movie === true)
+    }
+
+    useEffect(() => {
+        setSearchFormSearchString(formValues.film_name)
+    }, [formValues.film_name, props])
+
+    useEffect(() => {
+        setSearchFormFilter(formValues.short_movie)
+    }, [formValues.short_movie, props])
 
     return (
         <form className="searchform" onSubmit={handleSubmit}>
             <div className="searchform__block">
                 <div className="searchform__icon"></div>
                 <input
-                    className={`searchform__input ${formErrors.name ? "searchform__input-error" : ""}`}
-                    placeholder="Фильм"
+                    id="film_name"
                     name="film_name"
-                    value={formValues.film_name || props.searchFormSearchString}
+                    type="text"
+                    className={`searchform__input ${formErrors.name ? "searchform__input-error" : ""}`}
+                    value={formValues.film_name || ""}
                     autoComplete="off"
-                    defaultValue={props.searchFormSearchString}
-                    required={true}
+                    // defaultValue={searchFormSearchString}
                     onChange={handleChange}
+                    placeholder="Фильм"
                 />
                 <button
                     type="submit"
@@ -50,7 +62,7 @@ function SearchForm(props) {
             </div>
             <div className="searchform__block searchform__block-filter">
                 <span className="searchform__line"></span>
-                <FilterCheckbox title="Короткометражки" handleChange={handleChange}/>
+                <FilterCheckbox title="Короткометражки" handleChange={handleChangeFilter}/>
             </div>
         </form>
     )

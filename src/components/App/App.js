@@ -9,7 +9,6 @@ import Message from "../Message/Message";
 import Profile from "../Profile/Profile"
 import Register from "../Register/Register";
 import Preloader from "../Preloader/Preloader";
-import SavedMovies from "../SavedMovies/SavedMovies";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import {CurrentUserContext} from "../../contexts/CurrentUserContext";
 import {catchError} from "../../utils/utils";
@@ -22,7 +21,7 @@ import {
     CARD_COUNT_PER_PAGE_MOBILE,
     MOBILE_WIDTH,
     MOVIE_SITE,
-    RESIZE_TIMEOUT, TOKEN_NAME
+    RESIZE_TIMEOUT, SHORT_MOVIE_DURATION, STORAGE_NAME_FILMS, STORAGE_NAME_TOKEN
 } from "../../utils/constants"
 
 function App() {
@@ -43,7 +42,7 @@ function App() {
     // текущий пользователь
     const [currentUser, setCurrentUser] = useState({})
     // фильмы (поиск)
-    const [movies, setMovies] = useState([]);
+    const [moviesLoaded, setMoviesLoaded] = useState(false);
     // сохраненные фильмы (лайк)
     const [savedMovies, setSavedMovies] = useState([]);
     // строка поиска
@@ -54,41 +53,45 @@ function App() {
     const [movieCountPerPage, setMovieCountPerPage] = useState(CARD_COUNT_PER_PAGE)
     // текущая страница фильмов
     const [currentPage, setCurrentPage] = useState(1);
+    // максимальная страница фильмов
+    const [maxPage, setMaxPage] = useState(1);
     // текущая страница сохраненных фильмов
     const [currentPageSaved, setCurrentPageSaved] = useState(1);
     // идентификаторы сохраненных фильмов
     const [savedMoviesIds, setSavedMoviesIds] = useState([]);
+    const [reloadMovies, setReloadMovies] = useState(false);
+    const [visibleMovies, setVisibleMovies] = useState([]);
 
-    const getSaveMoviesIds = function (data) {
-        setSavedMoviesIds(data.length > 0 ? data.map(item => item.id) : [])
-    }
-
-    const getSavedMovies = function () {
-        mainApi.getSavedMovies().then(data => {
-            if (data) {
-                data = data.map(item => {
-                    item.id = item.movieId
-                    return item
-                })
-            }
-            setSavedMovies(data)
-            getSaveMoviesIds(data)
-
-            if (movies && data) {
-                const _data = movies.map(movie => {
-                    const item1 = data.filter(item0 => item0.id === movie.id)
-                    movie._id = item1 && item1.length > 0 ? item1[0]._id : undefined
-                    return movie
-                })
-
-                setMovies(_data)
-            }
-
-        }).catch(err => {
-            handleApiError()
-            catchError(err)
-        })
-    }
+    // const getSaveMoviesIds = function (data) {
+    //     setSavedMoviesIds(data.length > 0 ? data.map(item => item.id) : [])
+    // }
+    //
+    // const getSavedMovies = function () {
+    //     mainApi.getSavedMovies().then(data => {
+    //         if (data) {
+    //             data = data.map(item => {
+    //                 item.id = item.movieId
+    //                 return item
+    //             })
+    //         }
+    //         setSavedMovies(data)
+    //         getSaveMoviesIds(data)
+    //
+    //         if (movies && data) {
+    //             const _data = movies.map(movie => {
+    //                 const item1 = data.filter(item0 => item0.id === movie.id)
+    //                 movie._id = item1 && item1.length > 0 ? item1[0]._id : undefined
+    //                 return movie
+    //             })
+    //
+    //             setMovies(_data)
+    //         }
+    //
+    //     }).catch(err => {
+    //         handleApiError()
+    //         catchError(err)
+    //     })
+    // }
 
     const onMovieLike = function (movie) {
         const isLiked = savedMoviesIds.includes(movie.id)
@@ -110,7 +113,7 @@ function App() {
             }
 
             mainApi.saveMovie(body).then(obj => {
-                getSavedMovies()
+                // getSavedMovies()
             }).catch((err) => {
                 handleApiError()
                 catchError(err)
@@ -120,7 +123,7 @@ function App() {
                 handleApiError()
             } else {
                 mainApi.deleteMovie(movie._id).then(obj => {
-                    getSavedMovies()
+                    // getSavedMovies()
                 }).catch((err) => {
                     handleApiError()
                     catchError(err)
@@ -146,7 +149,7 @@ function App() {
     }
 
     const handleTokenCheck = (redirectToMain = false) => {
-        const token = localStorage.getItem(TOKEN_NAME)
+        const token = localStorage.getItem(STORAGE_NAME_TOKEN)
 
         if (token) {
             mainApi.userInfo(token).then((user) => {
@@ -155,7 +158,7 @@ function App() {
                     setCurrentUser(user)
                     setIsTokenLoaded(true);
 
-                    getSavedMovies()
+                    // getSavedMovies()
 
                     if (redirectToMain) {
                         navigate("/", {replace: true})
@@ -177,7 +180,7 @@ function App() {
     const handleLoginSuccess = (data) => {
         const {token} = data;
 
-        localStorage.setItem(TOKEN_NAME, token)
+        localStorage.setItem(STORAGE_NAME_TOKEN, token)
         setLoggedIn(true)
         setCurrentUser(data)
         navigate("/movies", {replace: true})
@@ -186,7 +189,8 @@ function App() {
     }
 
     function handleLogOut() {
-        localStorage.removeItem(TOKEN_NAME)
+        localStorage.removeItem(STORAGE_NAME_TOKEN)
+        localStorage.removeItem(STORAGE_NAME_FILMS)
         setLoggedIn(false)
         setCurrentUser({})
         navigate("/", {replace: true})
@@ -259,18 +263,97 @@ function App() {
         // eslint-disable-next-line
     }, [])
 
-    function searchMovie() {
-        setIsPreloaderVisible(true)
+    const loadMoviesFromStorage = () => {
+        const moviesJson = localStorage.getItem(STORAGE_NAME_FILMS)
 
-        moviesApi.getMovies().then((data) => {
-            setIsPreloaderVisible(false)
-            setMovies(data)
-        }).catch((err) => {
-            setIsPreloaderVisible(false)
-            catchError(err)
-            handleApiError()
-        })
+        if (moviesJson === null) {
+            return {
+                movies: [],
+                searchFilmName: "",
+                searchShortMovie: ""
+            }
+        }
+
+        return JSON.parse(moviesJson)
     }
+
+    const saveMoviesToStorage = (movies, searchFilmName, searchShortMovie) => {
+        localStorage.setItem(
+            STORAGE_NAME_FILMS,
+            JSON.stringify({
+                movies,
+                searchFilmName,
+                searchShortMovie
+            }))
+    }
+
+    function loadMovies() {
+        const {movies} = loadMoviesFromStorage()
+
+        if (movies.length === 0) {
+            setIsPreloaderVisible(true)
+
+            moviesApi.getMovies().then((data) => {
+                setIsPreloaderVisible(false)
+                // setMovies(data)
+                setMoviesLoaded(true)
+                saveMoviesToStorage(data, searchFormSearchString, searchFormFilter)
+            }).catch((err) => {
+                setIsPreloaderVisible(false)
+                catchError(err)
+                handleApiError()
+            })
+        } else {
+            setMoviesLoaded(true)
+        }
+    }
+
+    useEffect(() => {
+        setReloadMovies(true)
+    }, [searchFormFilter])
+
+    useEffect(() => {
+        setReloadMovies(true)
+    }, [currentPage])
+
+    useEffect(() => {
+        setReloadMovies(true)
+    }, [maxPage])
+
+    useEffect(() => {
+        setReloadMovies(true)
+    }, [moviesLoaded])
+
+
+    useEffect(() => {
+        if (!reloadMovies) {
+            return;
+        }
+
+        const {movies} = loadMoviesFromStorage()
+
+        if (movies.length === 0) {
+            return
+        }
+
+        let preVisibleMovies = [];
+
+        if (searchFormSearchString) {
+            preVisibleMovies = movies.filter(
+                movie => movie.nameRU.toLowerCase().includes(searchFormSearchString.toLowerCase())
+            );
+        }
+
+        if (searchFormFilter === true) {
+            preVisibleMovies = preVisibleMovies.filter(movie => movie.duration <= SHORT_MOVIE_DURATION)
+        }
+
+        const visibleMovies = preVisibleMovies.length > 0 ? preVisibleMovies.slice(0, movieCountPerPage * currentPage) : []
+        setMaxPage(Math.ceil(preVisibleMovies.length / movieCountPerPage));
+        setVisibleMovies(visibleMovies);
+
+        setReloadMovies(false)
+    }, [reloadMovies])
 
     useEffect(() => {
         function updateSize() {
@@ -303,42 +386,49 @@ function App() {
                             <ProtectedRoute
                                 element={Movies}
                                 loggedIn={loggedIn}
-                                movies={movies}
-                                savedMovies={savedMovies}
+                                savedMoviesFlag={false}
+                                visibleMovies={visibleMovies}
                                 savedMoviesIds={savedMoviesIds}
-                                searchFormSearchString={searchFormSearchString}
-                                searchFormFilter={searchFormFilter}
-                                movieCountPerPage={movieCountPerPage}
                                 currentPage={currentPage}
+                                maxPage={maxPage}
                                 onMovieLike={onMovieLike}
-                                searchMovie={searchMovie}
-                                setSearchFormSearchString={setSearchFormSearchString}
-                                setSearchFormFilter={setSearchFormFilter}
-                                setErrorMessage={setTextMessage}
-                                setIsMessageSuccess={setIsMessageSuccess}
-                                setIsErrorOpen={setIsMessageOpen}
+                                loadMovies={loadMovies}
                                 setCurrentPage={setCurrentPage}
+                                setReloadMovies={setReloadMovies}
+
+                                searchFormSearchString={searchFormSearchString}
+                                setSearchFormSearchString={setSearchFormSearchString}
+                                searchFormFilter={searchFormFilter}
+                                setSearchFormFilter={setSearchFormFilter}
+
+                                setTextMessage={setTextMessage}
+                                setIsMessageSuccess={setIsMessageSuccess}
+                                setIsMessageOpen={setIsMessageOpen}
                             />
                         }/>
                         <Route path="/saved-movies" element={
                             <ProtectedRoute
-                                element={SavedMovies}
+                                element={Movies}
                                 loggedIn={loggedIn}
-                                movies={movies}
-                                savedMovies={savedMovies}
+                                savedMoviesFlag={true}
+                                visibleMovies={visibleMovies}
                                 savedMoviesIds={savedMoviesIds}
-                                searchFormSearchString={searchFormSearchString}
-                                searchFormFilter={searchFormFilter}
-                                movieCountPerPage={movieCountPerPage}
-                                currentPage={currentPageSaved}
+                                currentPage={currentPage}
+                                maxPage={maxPage}
                                 onMovieLike={onMovieLike}
-                                searchMovie={searchMovie}
+                                loadMovies={loadMovies}
+                                setCurrentPage={setCurrentPage}
+                                setReloadMovies={setReloadMovies}
+
+                                searchFormSearchString={searchFormSearchString}
                                 setSearchFormSearchString={setSearchFormSearchString}
+                                searchFormFilter={searchFormFilter}
                                 setSearchFormFilter={setSearchFormFilter}
-                                setErrorMessage={setTextMessage}
+
+                                setTextMessage={setTextMessage}
                                 setIsMessageSuccess={setIsMessageSuccess}
-                                setIsErrorOpen={setIsMessageOpen}
-                                setCurrentPage={setCurrentPageSaved}
+                                setIsMessageOpen={setIsMessageOpen}
+
                             />
                         }/>
                         <Route path="/profile" element={

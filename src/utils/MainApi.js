@@ -1,4 +1,4 @@
-import {FILMOPOISK_API, TOKEN_NAME} from "./constants";
+import {FILMOPOISK_API, STORAGE_NAME_TOKEN} from "./constants";
 
 export class BaseApi {
     constructor(options) {
@@ -16,7 +16,7 @@ export class BaseApi {
 
     _add_token() {
         if (this._useToken) {
-            this._headers["Authorization"] = `Bearer ${localStorage.getItem(TOKEN_NAME)}`;
+            this._headers["Authorization"] = `Bearer ${localStorage.getItem(STORAGE_NAME_TOKEN)}`;
         }
     }
 
