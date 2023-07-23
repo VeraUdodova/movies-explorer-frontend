@@ -1,3 +1,5 @@
+import {FILMOPOISK_API, TOKEN_NAME} from "./constants";
+
 export class BaseApi {
     constructor(options) {
         this._baseUrl = options.baseUrl
@@ -14,7 +16,7 @@ export class BaseApi {
 
     _add_token() {
         if (this._useToken) {
-            this._headers["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
+            this._headers["Authorization"] = `Bearer ${localStorage.getItem(TOKEN_NAME)}`;
         }
     }
 
@@ -70,7 +72,7 @@ class MainApi extends BaseApi {
 }
 
 export const mainApi = new MainApi({
-    baseUrl: "https://api.filmopoisk.nomoredomains.rocks",
+    baseUrl: FILMOPOISK_API,
     headers: {
         "Content-Type": "application/json"
     },

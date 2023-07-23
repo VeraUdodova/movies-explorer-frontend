@@ -17,14 +17,16 @@ import {mainApi} from "../../utils/MainApi";
 import {moviesApi} from "../../utils/MoviesApi";
 import "./App.css";
 import NotFound from "../NotFound/NotFound";
+import {
+    CARD_COUNT_PER_PAGE,
+    CARD_COUNT_PER_PAGE_MOBILE,
+    MOBILE_WIDTH,
+    MOVIE_SITE,
+    RESIZE_TIMEOUT, TOKEN_NAME
+} from "../../utils/constants"
 
 function App() {
     const navigate = useNavigate();
-
-    // количество карточек на "страницу"
-    const cardCountPerPage = 7;
-    // количество карточек на "страницу" в мобильной версии
-    const cardCountPerPageMobile = 5;
 
     const [isTokenLoaded, setIsTokenLoaded] = useState(null);
 
@@ -49,7 +51,7 @@ function App() {
     // фильтр Короткометражки
     const [searchFormFilter, setSearchFormFilter] = useState(false);
     // количество фильмов на страницу
-    const [movieCountPerPage, setMovieCountPerPage] = useState(cardCountPerPage)
+    const [movieCountPerPage, setMovieCountPerPage] = useState(CARD_COUNT_PER_PAGE)
     // текущая страница фильмов
     const [currentPage, setCurrentPage] = useState(1);
     // текущая страница сохраненных фильмов
@@ -92,7 +94,7 @@ function App() {
         const isLiked = savedMoviesIds.includes(movie.id)
 
         if (!isLiked) {
-            const image = `https://api.nomoreparties.co${movie.image.url}`
+            const image = `${MOVIE_SITE}${movie.image.url}`
             const body = {
                 country: movie.country,
                 description: movie.description,
@@ -144,7 +146,7 @@ function App() {
     }
 
     const handleTokenCheck = (redirectToMain = false) => {
-        const token = localStorage.getItem("token")
+        const token = localStorage.getItem(TOKEN_NAME)
 
         if (token) {
             mainApi.userInfo(token).then((user) => {
@@ -175,7 +177,7 @@ function App() {
     const handleLoginSuccess = (data) => {
         const {token} = data;
 
-        localStorage.setItem("token", token)
+        localStorage.setItem(TOKEN_NAME, token)
         setLoggedIn(true)
         setCurrentUser(data)
         navigate("/movies", {replace: true})
@@ -184,7 +186,7 @@ function App() {
     }
 
     function handleLogOut() {
-        localStorage.removeItem("token")
+        localStorage.removeItem(TOKEN_NAME)
         setLoggedIn(false)
         setCurrentUser({})
         navigate("/", {replace: true})
@@ -273,8 +275,12 @@ function App() {
     useEffect(() => {
         function updateSize() {
             setTimeout(() => {
-                setMovieCountPerPage(window.innerWidth <= 600 ? cardCountPerPageMobile : cardCountPerPage)
-            }, 5000)
+                setMovieCountPerPage(
+                    window.innerWidth <= MOBILE_WIDTH ?
+                        CARD_COUNT_PER_PAGE_MOBILE :
+                        CARD_COUNT_PER_PAGE
+                )
+            }, RESIZE_TIMEOUT)
         }
 
         window.addEventListener('resize', updateSize);
