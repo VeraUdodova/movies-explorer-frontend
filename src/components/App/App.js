@@ -56,13 +56,29 @@ function App() {
     const [maxPage, setMaxPage] = useState(1);
     // идентификаторы сохраненных фильмов
     const [savedMoviesIds, setSavedMoviesIds] = useState([]);
+    const [savedMoviesIdsRelation, setSavedMoviesIdsRelation] = useState({});
     const [reloadMovies, setReloadMovies] = useState(false);
     const [visibleMovies, setVisibleMovies] = useState([]);
     const [visibleSavedMovies, setVisibleSavedMovies] = useState([]);
 
     const getSavedMovies = function () {
+        if (!loggedIn) {
+            return
+        }
+
         mainApi.getSavedMovies().then(data => {
-            setSavedMoviesIds(data.length > 0 ? data.map(item => item.movieId) : [])
+            if (data.length > 0) {
+                let movies = {}
+                for (const key in data) {
+                    movies[data[key].movieId] = data[key]._id
+                }
+
+                setSavedMoviesIdsRelation(movies)
+                setSavedMoviesIds(data.length > 0 ? data.map(item => item.movieId) : [])
+            } else {
+                setSavedMoviesIds([])
+                setSavedMoviesIdsRelation([])
+            }
         }).catch(err => {
             handleApiError()
             catchError(err)
@@ -89,24 +105,25 @@ function App() {
             }
 
             mainApi.saveMovie(body).then(obj => {
-                // getSavedMovies()
                 setSavedMoviesIds([...savedMoviesIds, obj.movieId])
             }).catch((err) => {
                 handleApiError()
                 catchError(err)
             })
         } else {
-            if (movie._id === undefined) {
+            const movieId = savedMoviesIdsRelation[movie.id]
+
+            if (movieId === undefined) {
                 handleApiError()
-            } else {
-                mainApi.deleteMovie(movie._id).then(obj => {
-                    setSavedMoviesIds(savedMoviesIds.filter(item => item !== movie.movieId))
-                    // getSavedMovies()
-                }).catch((err) => {
-                    handleApiError()
-                    catchError(err)
-                })
+                return
             }
+
+            mainApi.deleteMovie(movieId).then(obj => {
+                setSavedMoviesIds(savedMoviesIds.filter(item => item !== movie.id))
+            }).catch((err) => {
+                handleApiError()
+                catchError(err)
+            })
         }
     }
 
@@ -294,12 +311,8 @@ function App() {
         moviesApi.getMovies().then((data) => {
             setIsPreloaderVisible(false)
             saveMoviesToStorage(data, searchFormSearchString, searchFormFilter)
-            // setMovies(data)
             setMoviesLoaded(true)
             setReloadMovies(false)
-
-            // setVisibleSavedMovies()
-
         }).catch((err) => {
             setIsPreloaderVisible(false)
             catchError(err)
