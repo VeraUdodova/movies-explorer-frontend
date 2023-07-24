@@ -28,7 +28,8 @@ function Movies(props) {
                 setCurrentPage={props.setCurrentPage}
                 setReloadMovies={props.setReloadMovies}
                 loadMoviesFromStorage={props.loadMoviesFromStorage}
-                moviesLoaded={props.moviesLoaded}
+                searchFormSearchString={props.searchFormSearchString}
+                reloadMovies={props.reloadMovies}
             />
         </div>
     )

@@ -5,6 +5,7 @@ import {FILMS_NOT_FOUND, MORE} from "../../utils/texts";
 
 function MoviesCardList(props) {
     const [buttonVisible, setButtonVisible] = useState(false);
+    const [notFoundText, setNotFoundText] = useState("");
 
     const {
         setCurrentPage,
@@ -15,7 +16,8 @@ function MoviesCardList(props) {
         onMovieLike,
         maxPage,
         setReloadMovies,
-        moviesLoaded
+        searchFormSearchString,
+        reloadMovies
     } = props;
 
     const nextPage = function () {
@@ -31,13 +33,15 @@ function MoviesCardList(props) {
         setCurrentPage(1)
     }, [])
 
+    useEffect(() => {
+        setNotFoundText(searchFormSearchString === "" ? "" : FILMS_NOT_FOUND)
+    }, [reloadMovies])
+
     return (
         <section className="movies">
             {
-                visibleMovies.length === 0 && moviesLoaded === true ?
-                    <div className="movies__zero">
-                        {FILMS_NOT_FOUND}
-                    </div>
+                visibleMovies.length === 0 ?
+                    <div className="movies__zero">{notFoundText}</div>
                     :
                     <>
                         {visibleMovies.map(movie => (

@@ -395,7 +395,7 @@ function App() {
                                 setCurrentPage={setCurrentPage}
                                 setReloadMovies={setReloadMovies}
                                 loadMoviesFromStorage={loadMoviesFromStorage}
-                                moviesLoaded={moviesLoaded}
+                                reloadMovies={reloadMovies}
 
                                 searchFormSearchString={searchFormSearchString}
                                 setSearchFormSearchString={setSearchFormSearchString}
@@ -420,7 +420,7 @@ function App() {
                                 setCurrentPage={setCurrentPage}
                                 setReloadMovies={setReloadMovies}
                                 loadMoviesFromStorage={loadMoviesFromStorage}
-                                moviesLoaded={moviesLoaded}
+                                reloadMovies={reloadMovies}
 
                                 searchFormSearchString=""
                                 setSearchFormSearchString={setSearchFormSearchString}
