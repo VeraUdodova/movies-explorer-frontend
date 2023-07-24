@@ -1,4 +1,5 @@
 import "./MoviesCard.css";
+import {MOVIE_SITE} from "../../utils/constants";
 
 function MoviesCard(props) {
     const {movie, savedMoviesIds, onMovieLike} = props;
@@ -23,7 +24,7 @@ function MoviesCard(props) {
                         <p className="moviecard__duration">{duration}</p>
                     </div>
                 </div>
-                <img className="moviecard__thumbnail" src={movie.image.url ? `https://api.nomoreparties.co${movie.image.url}` : movie.image} alt={movie.nameRU}/>
+                <img className="moviecard__thumbnail" src={movie.image.url ? `${MOVIE_SITE}${movie.image.url}` : movie.image} alt={movie.nameRU}/>
             </div>
             <button
                 onClick={onMovieLikeLocal}

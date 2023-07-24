@@ -12,7 +12,10 @@ function SearchForm(props) {
         setReloadMovies,
         loadMoviesFromStorage,
         searchFormFilter,
-        savedMoviesFlag
+        savedMoviesFlag,
+        setTextMessage,
+        setIsMessageSuccess,
+        setIsMessageOpen
     } = props;
 
     const [value, setValue] = useState("")
@@ -39,6 +42,13 @@ function SearchForm(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (value.trim() === "") {
+            setTextMessage("Нужно ввести ключевое слово")
+            setIsMessageSuccess(false)
+            setIsMessageOpen(true)
+            return
+        }
 
         if (!savedMoviesFlag) {
             setReloadMovies(true)

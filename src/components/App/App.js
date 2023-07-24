@@ -23,7 +23,7 @@ import {
     MOVIE_SITE,
     RESIZE_TIMEOUT, SHORT_MOVIE_DURATION, STORAGE_NAME_FILMS, STORAGE_NAME_TOKEN
 } from "../../utils/constants"
-import movies from "../Movies/Movies";
+import {API_ERROR, SOMETHING_WRONG, VALIDATION_ERROR} from "../../utils/texts";
 
 function App() {
     const navigate = useNavigate();
@@ -44,8 +44,6 @@ function App() {
     const [currentUser, setCurrentUser] = useState({})
     // фильмы (поиск)
     const [moviesLoaded, setMoviesLoaded] = useState(false);
-    // сохраненные фильмы (лайк)
-    const [savedMovies, setSavedMovies] = useState([]);
     // строка поиска
     const [searchFormSearchString, setSearchFormSearchString] = useState("");
     // фильтр Короткометражки
@@ -56,17 +54,11 @@ function App() {
     const [currentPage, setCurrentPage] = useState(1);
     // максимальная страница фильмов
     const [maxPage, setMaxPage] = useState(1);
-    // текущая страница сохраненных фильмов
-    const [currentPageSaved, setCurrentPageSaved] = useState(1);
     // идентификаторы сохраненных фильмов
     const [savedMoviesIds, setSavedMoviesIds] = useState([]);
     const [reloadMovies, setReloadMovies] = useState(false);
     const [visibleMovies, setVisibleMovies] = useState([]);
     const [visibleSavedMovies, setVisibleSavedMovies] = useState([]);
-
-    const getSaveMoviesIds = function (data) {
-        setSavedMoviesIds(data.length > 0 ? data.map(item => item.id) : [])
-    }
 
     const getSavedMovies = function () {
         mainApi.getSavedMovies().then(data => {
@@ -126,7 +118,7 @@ function App() {
         let message;
 
         if (data.message === "Validation failed") {
-            message = `Ошибка валидации: ${data.validation.body.keys}`;
+            message = `${VALIDATION_ERROR}: ${data.validation.body.keys}`;
         } else {
             message = data.message
         }
@@ -195,7 +187,7 @@ function App() {
         mainApi.signUp({name, email, password}).then((data) => {
             data._id ?
                 handleRegistrationSuccess({email, password}) :
-                handleRegistrationFailed({"message": "Что-то пошло не так"})
+                handleRegistrationFailed({"message": SOMETHING_WRONG})
         }).catch((err) => {
             catchError(err).then(data => handleRegistrationFailed(data))
         })
@@ -211,7 +203,7 @@ function App() {
         mainApi.signIn({email, password}).then((data) => {
             data.token ?
                 handleLoginSuccess(data) :
-                handleLoginFailed({"message": "Что-то пошло не так"})
+                handleLoginFailed({"message": SOMETHING_WRONG})
         }).catch((err) => {
             catchError(err).then(data => handleLoginFailed(data))
         })
@@ -232,10 +224,7 @@ function App() {
 
     const handleApiError = () => {
         setIsMessageSuccess(false);
-        setTextMessage(
-            "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер " +
-            "недоступен. Подождите немного и попробуйте ещё раз"
-        );
+        setTextMessage(API_ERROR);
         setIsMessageOpen(true);
     }
 
@@ -284,6 +273,7 @@ function App() {
     }, [moviesLoaded, savedMoviesIds])
 
     function loadMovies() {
+        console.log('load movies')
         const {movies} = loadMoviesFromStorage()
 
         if (movies.length > 0) {
@@ -329,7 +319,7 @@ function App() {
     }, [moviesLoaded])
 
     useEffect(() => {
-        if (moviesLoaded !== true) {
+        if (moviesLoaded !== true && reloadMovies === true) {
             loadMovies()
             return
         }
@@ -402,10 +392,10 @@ function App() {
                                 currentPage={currentPage}
                                 maxPage={maxPage}
                                 onMovieLike={onMovieLike}
-                                loadMovies={loadMovies}
                                 setCurrentPage={setCurrentPage}
                                 setReloadMovies={setReloadMovies}
                                 loadMoviesFromStorage={loadMoviesFromStorage}
+                                moviesLoaded={moviesLoaded}
 
                                 searchFormSearchString={searchFormSearchString}
                                 setSearchFormSearchString={setSearchFormSearchString}
@@ -427,10 +417,10 @@ function App() {
                                 currentPage={currentPage}
                                 maxPage={maxPage}
                                 onMovieLike={onMovieLike}
-                                loadMovies={loadMovies}
                                 setCurrentPage={setCurrentPage}
                                 setReloadMovies={setReloadMovies}
                                 loadMoviesFromStorage={loadMoviesFromStorage}
+                                moviesLoaded={moviesLoaded}
 
                                 searchFormSearchString=""
                                 setSearchFormSearchString={setSearchFormSearchString}

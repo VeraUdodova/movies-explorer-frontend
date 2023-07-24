@@ -5,7 +5,6 @@ function Movies(props) {
     return (
         <div key={props.savedMoviesFlag}>
             <SearchForm
-                loadMovies={props.loadMovies}
                 savedMoviesFlag={props.savedMoviesFlag}
                 searchFormSearchString={props.searchFormSearchString}
                 setSearchFormSearchString={props.setSearchFormSearchString}
@@ -15,6 +14,9 @@ function Movies(props) {
                 setCurrentPage={props.setCurrentPage}
                 setReloadMovies={props.setReloadMovies}
                 loadMoviesFromStorage={props.loadMoviesFromStorage}
+                setTextMessage={props.setTextMessage}
+                setIsMessageSuccess={props.setIsMessageSuccess}
+                setIsMessageOpen={props.setIsMessageOpen}
             />
             <MoviesCardList
                 savedMoviesIds={props.savedMoviesIds}
@@ -26,6 +28,7 @@ function Movies(props) {
                 setCurrentPage={props.setCurrentPage}
                 setReloadMovies={props.setReloadMovies}
                 loadMoviesFromStorage={props.loadMoviesFromStorage}
+                moviesLoaded={props.moviesLoaded}
             />
         </div>
     )

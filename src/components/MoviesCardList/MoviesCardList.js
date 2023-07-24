@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import "./MoviesCardList.css";
+import {FILMS_NOT_FOUND, MORE} from "../../utils/texts";
 
 function MoviesCardList(props) {
     const [buttonVisible, setButtonVisible] = useState(false);
@@ -13,7 +14,8 @@ function MoviesCardList(props) {
         savedMoviesFlag,
         onMovieLike,
         maxPage,
-        setReloadMovies
+        setReloadMovies,
+        moviesLoaded
     } = props;
 
     const nextPage = function () {
@@ -32,9 +34,9 @@ function MoviesCardList(props) {
     return (
         <section className="movies">
             {
-                visibleMovies.length === 0 ?
+                visibleMovies.length === 0 && moviesLoaded === true ?
                     <div className="movies__zero">
-                        Фильмы отсутствуют
+                        {FILMS_NOT_FOUND}
                     </div>
                     :
                     <>
@@ -48,7 +50,7 @@ function MoviesCardList(props) {
                             />))}
                         {
                             buttonVisible ?
-                                <button className="movies__more" onClick={nextPage}>Еще</button>
+                                <button className="movies__more" onClick={nextPage}>{MORE}</button>
                                 :
                                 <></>
                         }
