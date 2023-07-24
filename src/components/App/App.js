@@ -234,6 +234,13 @@ function App() {
 
     useEffect(() => {
         handleTokenCheck(false)
+
+        setMovieCountPerPage(
+            window.innerWidth <= MOBILE_WIDTH ?
+                CARD_COUNT_PER_PAGE_MOBILE :
+                CARD_COUNT_PER_PAGE
+        )
+
         // eslint-disable-next-line
     }, [])
 
@@ -273,7 +280,6 @@ function App() {
     }, [moviesLoaded, savedMoviesIds])
 
     function loadMovies() {
-        console.log('load movies')
         const {movies} = loadMoviesFromStorage()
 
         if (movies.length > 0) {
@@ -312,6 +318,10 @@ function App() {
     useEffect(() => {
         setReloadMovies(true)
     }, [maxPage])
+
+    useEffect(() => {
+        setReloadMovies(true)
+    }, [movieCountPerPage])
 
     useEffect(() => {
         setReloadMovies(true)
