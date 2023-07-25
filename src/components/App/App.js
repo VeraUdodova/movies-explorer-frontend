@@ -44,10 +44,10 @@ function App() {
     const [currentUser, setCurrentUser] = useState({})
     // фильмы (поиск)
     const [moviesLoaded, setMoviesLoaded] = useState(false);
-    // строка поиска
-    const [searchFormSearchString, setSearchFormSearchString] = useState("");
-    // фильтр Короткометражки
-    const [searchFormFilter, setSearchFormFilter] = useState(false);
+    // строка поиска для поиска
+    const [searchQuery, setSearchQuery] = useState("");
+    // фильтр Короткометражки для поиска
+    const [searchFilter, setSearchFilter] = useState(false);
     // количество фильмов на страницу
     const [movieCountPerPage, setMovieCountPerPage] = useState(CARD_COUNT_PER_PAGE)
     // текущая страница фильмов
@@ -288,7 +288,7 @@ function App() {
 
         moviesApi.getMovies().then((data) => {
             setIsPreloaderVisible(false)
-            saveMoviesToStorage(data, searchFormSearchString, searchFormFilter)
+            saveMoviesToStorage(data, searchQuery, searchFilter)
             setMoviesLoaded(true)
             setReloadMovies(false)
         }).catch((err) => {
@@ -323,7 +323,7 @@ function App() {
 
     useEffect(() => {
         setReloadMovies(true)
-    }, [searchFormFilter, currentPage, maxPage, movieCountPerPage])
+    }, [searchFilter, currentPage, maxPage, movieCountPerPage])
 
     useEffect(() => {
         if (moviesLoaded !== true && reloadMovies === true) {
@@ -343,17 +343,17 @@ function App() {
 
         let preVisibleMovies = [];
 
-        if (searchFormSearchString) {
+        if (searchQuery) {
             preVisibleMovies = movies.filter(
-                movie => movie.nameRU.toLowerCase().includes(searchFormSearchString.toLowerCase())
+                movie => movie.nameRU.toLowerCase().includes(searchQuery.toLowerCase())
             );
         }
 
-        if (searchFormFilter === true) {
+        if (searchFilter === true) {
             preVisibleMovies = preVisibleMovies.filter(movie => movie.duration <= SHORT_MOVIE_DURATION)
         }
 
-        saveMoviesToStorage(movies, searchFormSearchString, searchFormFilter === true)
+        saveMoviesToStorage(movies, searchQuery, searchFilter === true)
 
         const visibleMovies = preVisibleMovies.length > 0 ? preVisibleMovies.slice(0, movieCountPerPage * currentPage) : []
         setMaxPage(Math.ceil(preVisibleMovies.length / movieCountPerPage));
@@ -393,22 +393,22 @@ function App() {
                             <ProtectedRoute
                                 element={Movies}
                                 loggedIn={loggedIn}
+
                                 savedMoviesFlag={false}
                                 visibleMovies={visibleMovies}
                                 savedMoviesIds={savedMoviesIds}
                                 currentPage={currentPage}
                                 maxPage={maxPage}
+                                searchQuery={searchQuery}
+
                                 onMovieLike={onMovieLike}
-                                setCurrentPage={setCurrentPage}
-                                setReloadMovies={setReloadMovies}
                                 loadMoviesFromStorage={loadMoviesFromStorage}
                                 reloadMovies={reloadMovies}
 
-                                searchFormSearchString={searchFormSearchString}
-                                setSearchFormSearchString={setSearchFormSearchString}
-                                searchFormFilter={searchFormFilter}
-                                setSearchFormFilter={setSearchFormFilter}
-
+                                setSearchQuery={setSearchQuery}
+                                setSearchFilter={setSearchFilter}
+                                setCurrentPage={setCurrentPage}
+                                setReloadMovies={setReloadMovies}
                                 setTextMessage={setTextMessage}
                                 setIsMessageSuccess={setIsMessageSuccess}
                                 setIsMessageOpen={setIsMessageOpen}
@@ -418,22 +418,22 @@ function App() {
                             <ProtectedRoute
                                 element={Movies}
                                 loggedIn={loggedIn}
+
                                 savedMoviesFlag={true}
                                 visibleMovies={visibleSavedMovies}
                                 savedMoviesIds={savedMoviesIds}
                                 currentPage={currentPage}
                                 maxPage={maxPage}
+                                searchQuery=""
+
                                 onMovieLike={onMovieLike}
-                                setCurrentPage={setCurrentPage}
-                                setReloadMovies={setReloadMovies}
                                 loadMoviesFromStorage={loadMoviesFromStorage}
                                 reloadMovies={reloadMovies}
 
-                                searchFormSearchString=""
-                                setSearchFormSearchString={setSearchFormSearchString}
-                                searchFormFilter={false}
-                                setSearchFormFilter={setSearchFormFilter}
-
+                                setSearchQuery={setSearchQuery}
+                                setSearchFilter={setSearchFilter}
+                                setCurrentPage={setCurrentPage}
+                                setReloadMovies={setReloadMovies}
                                 setTextMessage={setTextMessage}
                                 setIsMessageSuccess={setIsMessageSuccess}
                                 setIsMessageOpen={setIsMessageOpen}

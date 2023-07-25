@@ -7,11 +7,10 @@ function SearchForm(props) {
     const {handleChange, formValues, formErrors, setFormValues} = useFormWithValidation();
     const {
         setCurrentPage,
-        setSearchFormSearchString,
-        setSearchFormFilter,
+        setSearchQuery,
+        setSearchFilter,
         setReloadMovies,
         loadMoviesFromStorage,
-        searchFormFilter,
         savedMoviesFlag,
         setTextMessage,
         setIsMessageSuccess,
@@ -47,7 +46,7 @@ function SearchForm(props) {
     const handleChangeFilter = (e) => {
         handleChange(e)
         if (!savedMoviesFlag) {
-            setSearchFormFilter(formValues.short_movie === true)
+            setSearchFilter(formValues.short_movie === true)
         }
     }
 
@@ -59,7 +58,7 @@ function SearchForm(props) {
                 film_name: searchFilmName,
                 short_movie: searchShortMovie === true
             })
-            setSearchFormFilter(searchShortMovie === true)
+            setSearchFilter(searchShortMovie === true)
             setValue(searchFilmName)
         } else {
             setFormValues({
@@ -73,13 +72,13 @@ function SearchForm(props) {
 
     useEffect(() => {
         if (!savedMoviesFlag) {
-            setSearchFormSearchString(formValues.film_name)
+            setSearchQuery(formValues.film_name)
         }
     }, [formValues.film_name, props])
 
     useEffect(() => {
         if (!savedMoviesFlag) {
-            setSearchFormFilter(formValues.short_movie)
+            setSearchFilter(formValues.short_movie)
         }
     }, [formValues.short_movie, props])
 
@@ -105,7 +104,7 @@ function SearchForm(props) {
                     title="Короткометражки"
                     handleChange={handleChangeFilter}
                     name="short_movie"
-                    searchFormFilter={searchFormFilter}/>
+                    setSearchFilter={setSearchFilter}/>
             </div>
         </form>
     )

@@ -6,10 +6,8 @@ function Movies(props) {
         <div key={props.savedMoviesFlag}>
             <SearchForm
                 savedMoviesFlag={props.savedMoviesFlag}
-                searchFormSearchString={props.searchFormSearchString}
-                setSearchFormSearchString={props.setSearchFormSearchString}
-                searchFormFilter={props.searchFormFilter}
-                setSearchFormFilter={props.setSearchFormFilter}
+                setSearchQuery={props.setSearchQuery}
+                setSearchFilter={props.setSearchFilter}
                 currentPage={props.currentPage}
                 setCurrentPage={props.setCurrentPage}
                 setReloadMovies={props.setReloadMovies}
@@ -28,7 +26,7 @@ function Movies(props) {
                 setCurrentPage={props.setCurrentPage}
                 setReloadMovies={props.setReloadMovies}
                 loadMoviesFromStorage={props.loadMoviesFromStorage}
-                searchFormSearchString={props.searchFormSearchString}
+                searchQuery={props.searchQuery}
                 reloadMovies={props.reloadMovies}
             />
         </div>

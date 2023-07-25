@@ -16,7 +16,7 @@ function MoviesCardList(props) {
         onMovieLike,
         maxPage,
         setReloadMovies,
-        searchFormSearchString,
+        searchQuery,
         reloadMovies
     } = props;
 
@@ -34,7 +34,7 @@ function MoviesCardList(props) {
     }, [])
 
     useEffect(() => {
-        setNotFoundText(searchFormSearchString === "" ? "" : FILMS_NOT_FOUND)
+        setNotFoundText(searchQuery === "" ? "" : FILMS_NOT_FOUND)
     }, [reloadMovies])
 
     return (
