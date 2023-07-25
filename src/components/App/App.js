@@ -61,7 +61,7 @@ function App() {
     const [visibleMovies, setVisibleMovies] = useState([]);
     const [visibleSavedMovies, setVisibleSavedMovies] = useState([]);
 
-    const getSavedMovies = function () {
+    const getSavedMovies = () => {
         if (!loggedIn) {
             return
         }
@@ -85,7 +85,7 @@ function App() {
         })
     }
 
-    const onMovieLike = function (movie) {
+    const onMovieLike = (movie) => {
         const isLiked = savedMoviesIds.includes(movie.id)
 
         if (!isLiked) {
@@ -127,11 +127,11 @@ function App() {
         }
     }
 
-    function closeMessage() {
+    const closeMessage = () => {
         setIsMessageOpen(false);
     }
 
-    function makeErrorMessage(data) {
+    const makeErrorMessage = (data) => {
         let message;
 
         if (data.message === "Validation failed") {
@@ -182,7 +182,7 @@ function App() {
         handleTokenCheck(false)
     }
 
-    function handleLogOut() {
+    const handleLogOut = () => {
         localStorage.removeItem(STORAGE_NAME_TOKEN)
         localStorage.removeItem(STORAGE_NAME_FILMS)
         setLoggedIn(false)
@@ -190,13 +190,13 @@ function App() {
         navigate("/", {replace: true})
     }
 
-    function handleRegistrationFailed(data) {
+    const handleRegistrationFailed = (data) => {
         setIsMessageSuccess(false)
         setTextMessage(makeErrorMessage(data))
         setIsMessageOpen(true)
     }
 
-    function handleRegistrationSuccess({email, password}) {
+    const handleRegistrationSuccess = ({email, password}) => {
         onLogin({email, password})
     }
 
@@ -210,7 +210,7 @@ function App() {
         })
     }
 
-    function handleLoginFailed(data) {
+    const handleLoginFailed = (data) => {
         setIsMessageSuccess(false)
         setTextMessage(makeErrorMessage(data));
         setIsMessageOpen(true);
@@ -249,18 +249,6 @@ function App() {
         handleLogOut();
     }
 
-    useEffect(() => {
-        handleTokenCheck(false)
-
-        setMovieCountPerPage(
-            window.innerWidth <= MOBILE_WIDTH ?
-                CARD_COUNT_PER_PAGE_MOBILE :
-                CARD_COUNT_PER_PAGE
-        )
-
-        // eslint-disable-next-line
-    }, [])
-
     const loadMoviesFromStorage = () => {
         const moviesJson = localStorage.getItem(STORAGE_NAME_FILMS)
 
@@ -283,20 +271,10 @@ function App() {
                 searchFilmName: searchFilmName || "",
                 searchShortMovie: searchShortMovie || false
             }))
+        getSavedMovies()
     }
 
-    useEffect(() => {
-        if (moviesLoaded === false) {
-            return
-        }
-
-        const {movies} = loadMoviesFromStorage();
-
-        setVisibleSavedMovies(movies.filter(item => savedMoviesIds.includes(item.id)))
-
-    }, [moviesLoaded, savedMoviesIds])
-
-    function loadMovies() {
+    const loadMovies = () => {
         const {movies} = loadMoviesFromStorage()
 
         if (movies.length > 0) {
@@ -321,25 +299,31 @@ function App() {
     }
 
     useEffect(() => {
-        setReloadMovies(true)
-    }, [searchFormFilter])
+        if (moviesLoaded === false) {
+            return
+        }
+
+        const {movies} = loadMoviesFromStorage();
+
+        setVisibleSavedMovies(movies.filter(item => savedMoviesIds.includes(item.id)))
+
+    }, [moviesLoaded, savedMoviesIds])
+
+    useEffect(() => {
+        handleTokenCheck(false)
+
+        setMovieCountPerPage(
+            window.innerWidth <= MOBILE_WIDTH ?
+                CARD_COUNT_PER_PAGE_MOBILE :
+                CARD_COUNT_PER_PAGE
+        )
+
+        // eslint-disable-next-line
+    }, [])
 
     useEffect(() => {
         setReloadMovies(true)
-    }, [currentPage])
-
-    useEffect(() => {
-        setReloadMovies(true)
-    }, [maxPage])
-
-    useEffect(() => {
-        setReloadMovies(true)
-    }, [movieCountPerPage])
-
-    useEffect(() => {
-        setReloadMovies(true)
-        getSavedMovies()
-    }, [moviesLoaded])
+    }, [searchFormFilter, currentPage, maxPage, movieCountPerPage])
 
     useEffect(() => {
         if (moviesLoaded !== true && reloadMovies === true) {

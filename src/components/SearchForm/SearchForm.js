@@ -20,6 +20,37 @@ function SearchForm(props) {
 
     const [value, setValue] = useState("")
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if (value.trim() === "") {
+            setTextMessage("Нужно ввести ключевое слово")
+            setIsMessageSuccess(false)
+            setIsMessageOpen(true)
+            return
+        }
+
+        if (savedMoviesFlag) {
+
+        } else {
+            setReloadMovies(true)
+            setCurrentPage(1)
+        }
+    }
+    const handleChangeInput = (e) => {
+        setValue(e.target.value)
+        setFormValues({...formValues, film_name: value})
+
+        handleChange(e)
+    }
+
+    const handleChangeFilter = (e) => {
+        handleChange(e)
+        if (!savedMoviesFlag) {
+            setSearchFormFilter(formValues.short_movie === true)
+        }
+    }
+
     useEffect(() => {
         if (!savedMoviesFlag) {
             const {searchFilmName, searchShortMovie} = loadMoviesFromStorage()
@@ -39,35 +70,6 @@ function SearchForm(props) {
         }
         // eslint-disable-next-line
     }, [])
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        if (value.trim() === "") {
-            setTextMessage("Нужно ввести ключевое слово")
-            setIsMessageSuccess(false)
-            setIsMessageOpen(true)
-            return
-        }
-
-        if (!savedMoviesFlag) {
-            setReloadMovies(true)
-            setCurrentPage(1)
-        }
-    }
-    const handleChangeInput = (e) => {
-        setValue(e.target.value)
-        setFormValues({...formValues, film_name: value})
-
-        handleChange(e)
-    }
-
-    const handleChangeFilter = (e) => {
-        handleChange(e)
-        if (!savedMoviesFlag) {
-            setSearchFormFilter(formValues.short_movie === true)
-        }
-    }
 
     useEffect(() => {
         if (!savedMoviesFlag) {
