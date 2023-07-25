@@ -48,6 +48,10 @@ function App() {
     const [searchQuery, setSearchQuery] = useState("");
     // фильтр Короткометражки для поиска
     const [searchFilter, setSearchFilter] = useState(false);
+    // строка поиска для сохраненных
+    const [savedQuery, setSavedQuery] = useState("");
+    // фильтр Короткометражки для сохраненных
+    const [savedFilter, setSavedFilter] = useState(false);
     // количество фильмов на страницу
     const [movieCountPerPage, setMovieCountPerPage] = useState(CARD_COUNT_PER_PAGE)
     // текущая страница фильмов
@@ -58,6 +62,7 @@ function App() {
     const [savedMoviesIds, setSavedMoviesIds] = useState([]);
     const [savedMoviesIdsRelation, setSavedMoviesIdsRelation] = useState({});
     const [reloadMovies, setReloadMovies] = useState(false);
+    const [reloadSavedMovies, setReloadSavedMovies] = useState(false);
     const [visibleMovies, setVisibleMovies] = useState([]);
     const [visibleSavedMovies, setVisibleSavedMovies] = useState([]);
 
@@ -298,15 +303,30 @@ function App() {
         })
     }
 
+    const filterMoviesByName = (movies, name) => {
+        if (!name) {
+            return movies
+        }
+
+        return movies.filter(
+            movie => movie.nameRU.toLowerCase().includes(name.toLowerCase())
+        )
+    }
+
+    const filterShortMovies = (movies, filter) => {
+        if (filter !== true) {
+            return movies
+        }
+
+        return movies.filter(movie => movie.duration <= SHORT_MOVIE_DURATION)
+    }
+
     useEffect(() => {
         if (moviesLoaded === false) {
             return
         }
 
-        const {movies} = loadMoviesFromStorage();
-
-        setVisibleSavedMovies(movies.filter(item => savedMoviesIds.includes(item.id)))
-
+        setReloadSavedMovies(true)
     }, [moviesLoaded, savedMoviesIds])
 
     useEffect(() => {
@@ -326,6 +346,10 @@ function App() {
     }, [searchFilter, currentPage, maxPage, movieCountPerPage])
 
     useEffect(() => {
+        setReloadSavedMovies(true)
+    }, [savedFilter])
+
+    useEffect(() => {
         if (moviesLoaded !== true && reloadMovies === true) {
             loadMovies()
             return
@@ -341,17 +365,9 @@ function App() {
             return
         }
 
-        let preVisibleMovies = [];
-
-        if (searchQuery) {
-            preVisibleMovies = movies.filter(
-                movie => movie.nameRU.toLowerCase().includes(searchQuery.toLowerCase())
-            );
-        }
-
-        if (searchFilter === true) {
-            preVisibleMovies = preVisibleMovies.filter(movie => movie.duration <= SHORT_MOVIE_DURATION)
-        }
+        let preVisibleMovies = movies;
+        preVisibleMovies = filterMoviesByName(preVisibleMovies, searchQuery)
+        preVisibleMovies = filterShortMovies(preVisibleMovies, searchFilter)
 
         saveMoviesToStorage(movies, searchQuery, searchFilter === true)
 
@@ -361,6 +377,31 @@ function App() {
 
         setReloadMovies(false)
     }, [reloadMovies])
+
+    useEffect(() => {
+        if (moviesLoaded !== true && reloadSavedMovies === true) {
+            loadMovies()
+            return
+        }
+
+        if (!reloadSavedMovies) {
+            return;
+        }
+
+        const {movies} = loadMoviesFromStorage();
+
+        if (movies.length === 0) {
+            return
+        }
+
+        let visibleMovies = movies.filter(item => savedMoviesIds.includes(item.id))
+        visibleMovies = filterMoviesByName(visibleMovies, savedQuery)
+        visibleMovies = filterShortMovies(visibleMovies, savedFilter)
+
+        setVisibleSavedMovies(visibleMovies)
+
+        setReloadSavedMovies(false)
+    }, [reloadSavedMovies])
 
     useEffect(() => {
         function updateSize() {
@@ -428,12 +469,12 @@ function App() {
 
                                 onMovieLike={onMovieLike}
                                 loadMoviesFromStorage={loadMoviesFromStorage}
-                                reloadMovies={reloadMovies}
+                                reloadMovies={reloadSavedMovies}
 
-                                setSearchQuery={setSearchQuery}
-                                setSearchFilter={setSearchFilter}
+                                setSearchQuery={setSavedQuery}
+                                setSearchFilter={setSavedFilter}
                                 setCurrentPage={setCurrentPage}
-                                setReloadMovies={setReloadMovies}
+                                setReloadMovies={setReloadSavedMovies}
                                 setTextMessage={setTextMessage}
                                 setIsMessageSuccess={setIsMessageSuccess}
                                 setIsMessageOpen={setIsMessageOpen}

@@ -21,16 +21,22 @@ function MoviesCardList(props) {
     } = props;
 
     const nextPage = function () {
-        setCurrentPage(currentPage + 1)
+        if (!savedMoviesFlag) {
+            setCurrentPage(currentPage + 1)
+        }
         setReloadMovies(true)
     }
 
     useEffect(() => {
-        setButtonVisible(!savedMoviesFlag && currentPage < maxPage)
+        if (!savedMoviesFlag) {
+            setButtonVisible(!savedMoviesFlag && currentPage < maxPage)
+        }
     }, [currentPage, maxPage])
 
     useEffect(() => {
-        setCurrentPage(1)
+        if (!savedMoviesFlag) {
+            setCurrentPage(1)
+        }
     }, [])
 
     useEffect(() => {
@@ -46,7 +52,7 @@ function MoviesCardList(props) {
                     <>
                         {visibleMovies.map(movie => (
                             <MoviesCard
-                                key={movie.id || movie._id}
+                                key={movie.id}
                                 movie={movie}
                                 savedMoviesIds={savedMoviesIds}
                                 savedMoviesFlag={savedMoviesFlag}

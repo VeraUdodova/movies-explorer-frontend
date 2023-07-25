@@ -22,17 +22,16 @@ function SearchForm(props) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (value.trim() === "") {
+        if (!savedMoviesFlag && value.trim() === "") {
             setTextMessage("Нужно ввести ключевое слово")
             setIsMessageSuccess(false)
             setIsMessageOpen(true)
             return
         }
 
-        if (savedMoviesFlag) {
+        setReloadMovies(true)
 
-        } else {
-            setReloadMovies(true)
+        if (!savedMoviesFlag) {
             setCurrentPage(1)
         }
     }
@@ -45,9 +44,7 @@ function SearchForm(props) {
 
     const handleChangeFilter = (e) => {
         handleChange(e)
-        if (!savedMoviesFlag) {
-            setSearchFilter(formValues.short_movie === true)
-        }
+        setSearchFilter(formValues.short_movie === true)
     }
 
     useEffect(() => {
@@ -71,15 +68,11 @@ function SearchForm(props) {
     }, [])
 
     useEffect(() => {
-        if (!savedMoviesFlag) {
-            setSearchQuery(formValues.film_name)
-        }
+        setSearchQuery(formValues.film_name)
     }, [formValues.film_name, props])
 
     useEffect(() => {
-        if (!savedMoviesFlag) {
-            setSearchFilter(formValues.short_movie)
-        }
+        setSearchFilter(formValues.short_movie)
     }, [formValues.short_movie, props])
 
     return (
