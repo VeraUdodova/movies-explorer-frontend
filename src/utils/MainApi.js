@@ -21,7 +21,6 @@ export class BaseApi {
     }
 
     _get(link) {
-        console.log(`GET ${link}`)
         this._add_token();
 
         return fetch(`${this._baseUrl}${link}`, {
@@ -31,7 +30,6 @@ export class BaseApi {
     }
 
     _save(link, method, body = []) {
-        console.log(`${method} ${link}`)
         this._add_token();
 
         return fetch(`${this._baseUrl}${link}`, {
