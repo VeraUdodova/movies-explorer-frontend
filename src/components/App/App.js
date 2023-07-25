@@ -485,18 +485,25 @@ function App() {
                             <ProtectedRoute
                                 element={Profile}
                                 loggedIn={loggedIn}
+
                                 onLogout={onLogout}
                                 onProfileSave={onProfileSave}
                             />
                         }/>
                         <Route path="/signin" element={
-                            <Login
+                            <ProtectedRoute
+                                element={Login}
+                                loggedIn={!loggedIn}
+
                                 onLogin={onLogin}
                             />
                         }/>
                         <Route path="/signup" element={
-                            <Register
-                                onRegister={onRegister}
+                            <ProtectedRoute
+                                element={Register}
+                                loggedIn={!loggedIn}
+
+                                onLogin={onRegister}
                             />
                         }/>
                         <Route path="*" element={
@@ -504,8 +511,11 @@ function App() {
                         }/>
                     </Routes>
                 </main>
+
                 {isPreloaderVisible ? <Preloader/> : ""}
+
                 <Footer loggedIn={loggedIn}/>
+
                 <Message
                     isOpen={isMessageOpen}
                     onClose={closeMessage}
