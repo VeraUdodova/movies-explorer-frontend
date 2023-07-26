@@ -37,6 +37,7 @@ function MoviesCardList(props) {
         if (!savedMoviesFlag) {
             setCurrentPage(1)
         }
+        setReloadMovies(true)
     }, [])
 
     useEffect(() => {

@@ -3,8 +3,9 @@ import SearchForm from "../SearchForm/SearchForm";
 
 function Movies(props) {
     return (
-        <div key={props.savedMoviesFlag}>
+        <div key={`movies-div-${props.savedMoviesFlag}`}>
             <SearchForm
+                key={`movies-search-form-${props.savedMoviesFlag}`}
                 savedMoviesFlag={props.savedMoviesFlag}
                 setSearchQuery={props.setSearchQuery}
                 setSearchFilter={props.setSearchFilter}
@@ -17,6 +18,7 @@ function Movies(props) {
                 setIsMessageOpen={props.setIsMessageOpen}
             />
             <MoviesCardList
+                key={`movies-card-list-${props.savedMoviesFlag}`}
                 savedMoviesIds={props.savedMoviesIds}
                 savedMoviesFlag={props.savedMoviesFlag}
                 visibleMovies={props.visibleMovies}

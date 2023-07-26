@@ -285,6 +285,7 @@ function App() {
         if (movies.length > 0) {
             setMoviesLoaded(true)
             setReloadMovies(false)
+            setReloadSavedMovies(true)
 
             return
         }
@@ -296,6 +297,7 @@ function App() {
             saveMoviesToStorage(data, searchQuery, searchFilter)
             setMoviesLoaded(true)
             setReloadMovies(false)
+            setReloadSavedMovies(true)
         }).catch((err) => {
             setIsPreloaderVisible(false)
             catchError(err)
@@ -384,10 +386,6 @@ function App() {
             return
         }
 
-        if (!reloadSavedMovies) {
-            return;
-        }
-
         const {movies} = loadMoviesFromStorage();
 
         if (movies.length === 0) {
@@ -435,16 +433,18 @@ function App() {
                                 element={Movies}
                                 loggedIn={loggedIn}
 
+                                key="movies"
+
                                 savedMoviesFlag={false}
                                 visibleMovies={visibleMovies}
                                 savedMoviesIds={savedMoviesIds}
                                 currentPage={currentPage}
                                 maxPage={maxPage}
                                 searchQuery={searchQuery}
+                                reloadMovies={reloadMovies}
 
                                 onMovieLike={onMovieLike}
                                 loadMoviesFromStorage={loadMoviesFromStorage}
-                                reloadMovies={reloadMovies}
 
                                 setSearchQuery={setSearchQuery}
                                 setSearchFilter={setSearchFilter}
@@ -460,20 +460,22 @@ function App() {
                                 element={Movies}
                                 loggedIn={loggedIn}
 
+                                key="saved-movies"
+
                                 savedMoviesFlag={true}
                                 visibleMovies={visibleSavedMovies}
                                 savedMoviesIds={savedMoviesIds}
                                 currentPage={currentPage}
                                 maxPage={maxPage}
                                 searchQuery=""
+                                reloadMovies={reloadSavedMovies}
 
                                 onMovieLike={onMovieLike}
                                 loadMoviesFromStorage={loadMoviesFromStorage}
-                                reloadMovies={reloadSavedMovies}
 
                                 setSearchQuery={setSavedQuery}
                                 setSearchFilter={setSavedFilter}
-                                setCurrentPage={() => {}}
+                                setCurrentPage={setCurrentPage}
                                 setReloadMovies={setReloadSavedMovies}
                                 setTextMessage={setTextMessage}
                                 setIsMessageSuccess={setIsMessageSuccess}
