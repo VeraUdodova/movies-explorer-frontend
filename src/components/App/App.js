@@ -503,7 +503,7 @@ function App() {
                                 element={Register}
                                 loggedIn={!loggedIn}
 
-                                onLogin={onRegister}
+                                onRegister={onRegister}
                             />
                         }/>
                         <Route path="*" element={
