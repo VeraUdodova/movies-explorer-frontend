@@ -473,12 +473,11 @@ function App() {
 
                                 setSearchQuery={setSavedQuery}
                                 setSearchFilter={setSavedFilter}
-                                setCurrentPage={setCurrentPage}
+                                setCurrentPage={() => {}}
                                 setReloadMovies={setReloadSavedMovies}
                                 setTextMessage={setTextMessage}
                                 setIsMessageSuccess={setIsMessageSuccess}
                                 setIsMessageOpen={setIsMessageOpen}
-
                             />
                         }/>
                         <Route path="/profile" element={
