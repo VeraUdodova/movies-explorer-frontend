@@ -14,7 +14,8 @@ function SearchForm(props) {
         savedMoviesFlag,
         setTextMessage,
         setIsMessageSuccess,
-        setIsMessageOpen
+        setIsMessageOpen,
+        searchFilter
     } = props;
 
     const [value, setValue] = useState("")
@@ -69,10 +70,12 @@ function SearchForm(props) {
 
     useEffect(() => {
         setSearchQuery(formValues.film_name)
+        // eslint-disable-next-line
     }, [formValues.film_name, props])
 
     useEffect(() => {
         setSearchFilter(formValues.short_movie)
+        // eslint-disable-next-line
     }, [formValues.short_movie, props])
 
     return (
@@ -97,7 +100,7 @@ function SearchForm(props) {
                     title="Короткометражки"
                     handleChange={handleChangeFilter}
                     name="short_movie"
-                    setSearchFilter={setSearchFilter}/>
+                    searchFilter={searchFilter}/>
             </div>
         </form>
     )

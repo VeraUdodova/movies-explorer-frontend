@@ -81,8 +81,8 @@ function App() {
                 setSavedMoviesIdsRelation(movies)
                 setSavedMoviesIds(data.length > 0 ? data.map(item => item.movieId) : [])
             } else {
+                setSavedMoviesIdsRelation({})
                 setSavedMoviesIds([])
-                setSavedMoviesIdsRelation([])
             }
         }).catch(err => {
             handleApiError()
@@ -111,6 +111,7 @@ function App() {
 
             mainApi.saveMovie(body).then(obj => {
                 setSavedMoviesIds([...savedMoviesIds, obj.movieId])
+                getSavedMovies()
             }).catch((err) => {
                 handleApiError()
                 catchError(err)
@@ -125,6 +126,7 @@ function App() {
 
             mainApi.deleteMovie(movieId).then(obj => {
                 setSavedMoviesIds(savedMoviesIds.filter(item => item !== movie.id))
+                getSavedMovies()
             }).catch((err) => {
                 handleApiError()
                 catchError(err)
@@ -182,6 +184,7 @@ function App() {
         localStorage.setItem(STORAGE_NAME_TOKEN, token)
         setLoggedIn(true)
         setCurrentUser(data)
+
         navigate("/movies", {replace: true})
 
         handleTokenCheck(false)
@@ -192,6 +195,9 @@ function App() {
         localStorage.removeItem(STORAGE_NAME_FILMS)
         setLoggedIn(false)
         setCurrentUser({})
+        setVisibleMovies([])
+        setVisibleSavedMovies([])
+        setSavedMoviesIdsRelation({})
         navigate("/", {replace: true})
     }
 
@@ -255,6 +261,7 @@ function App() {
     }
 
     const loadMoviesFromStorage = () => {
+        // console.log('STORAGE_NAME_FILMS=' + STORAGE_NAME_FILMS)
         const moviesJson = localStorage.getItem(STORAGE_NAME_FILMS)
 
         if (moviesJson === null) {
@@ -279,7 +286,13 @@ function App() {
         getSavedMovies()
     }
 
-    const loadMovies = () => {
+    const loadMovies = (force = false) => {
+        // console.log('load movies')
+        if (!force && (!loggedIn || searchQuery === undefined || searchQuery === "")) {
+            setReloadMovies(false)
+            return;
+        }
+
         const {movies} = loadMoviesFromStorage()
 
         if (movies.length > 0) {
@@ -311,7 +324,7 @@ function App() {
         }
 
         return movies.filter(
-            movie => movie.nameRU.toLowerCase().includes(name.toLowerCase())
+            movie => movie.nameRU.toLowerCase().includes(name.toLowerCase()) || movie.nameEN.toLowerCase().includes(name.toLowerCase())
         )
     }
 
@@ -352,13 +365,13 @@ function App() {
     }, [savedFilter])
 
     useEffect(() => {
+        if (!reloadMovies && !moviesLoaded) {
+            return;
+        }
+
         if (moviesLoaded !== true && reloadMovies === true) {
             loadMovies()
             return
-        }
-
-        if (!reloadMovies) {
-            return;
         }
 
         const {movies} = loadMoviesFromStorage()
@@ -378,17 +391,19 @@ function App() {
         setVisibleMovies(visibleMovies);
 
         setReloadMovies(false)
+        // eslint-disable-next-line
     }, [reloadMovies])
 
     useEffect(() => {
-        if (moviesLoaded !== true && reloadSavedMovies === true) {
-            loadMovies()
-            return
+        if (!loggedIn) {
+            setReloadSavedMovies(false)
+            return;
         }
 
         const {movies} = loadMoviesFromStorage();
 
         if (movies.length === 0) {
+            loadMovies(true)
             return
         }
 
@@ -399,6 +414,7 @@ function App() {
         setVisibleSavedMovies(visibleMovies)
 
         setReloadSavedMovies(false)
+        // eslint-disable-next-line
     }, [reloadSavedMovies])
 
     useEffect(() => {
@@ -441,6 +457,7 @@ function App() {
                                 currentPage={currentPage}
                                 maxPage={maxPage}
                                 searchQuery={searchQuery}
+                                searchFilter={searchFilter}
                                 reloadMovies={reloadMovies}
 
                                 onMovieLike={onMovieLike}
@@ -468,6 +485,7 @@ function App() {
                                 currentPage={currentPage}
                                 maxPage={maxPage}
                                 searchQuery=""
+                                searchFilter={false}
                                 reloadMovies={reloadSavedMovies}
 
                                 onMovieLike={onMovieLike}

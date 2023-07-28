@@ -36,12 +36,15 @@ function MoviesCardList(props) {
     useEffect(() => {
         if (!savedMoviesFlag) {
             setCurrentPage(1)
+        } else {
+            setReloadMovies(true)
         }
-        setReloadMovies(true)
     }, [])
 
     useEffect(() => {
-        setNotFoundText(searchQuery === "" ? "" : FILMS_NOT_FOUND)
+        if (reloadMovies === false) {
+            setNotFoundText(searchQuery === "" ? "" : FILMS_NOT_FOUND)
+        }
     }, [reloadMovies])
 
     return (

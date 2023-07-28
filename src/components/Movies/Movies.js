@@ -9,6 +9,7 @@ function Movies(props) {
                 savedMoviesFlag={props.savedMoviesFlag}
                 setSearchQuery={props.setSearchQuery}
                 setSearchFilter={props.setSearchFilter}
+                searchFilter={props.searchFilter}
                 currentPage={props.currentPage}
                 setCurrentPage={props.setCurrentPage}
                 setReloadMovies={props.setReloadMovies}
