@@ -150,7 +150,7 @@ function App() {
         return message
     }
 
-    const handleTokenCheck = (redirectToMain = false) => {
+    const handleTokenCheck = (redirect, navigateTo = "/") => {
         const token = localStorage.getItem(STORAGE_NAME_TOKEN)
 
         if (token) {
@@ -161,8 +161,8 @@ function App() {
                     setIsTokenLoaded(true);
                     getSavedMovies()
 
-                    if (redirectToMain) {
-                        navigate("/", {replace: true})
+                    if (redirect) {
+                        navigate(navigateTo, {replace: true})
                     }
                 } else {
                     setIsTokenLoaded(false);
@@ -185,9 +185,7 @@ function App() {
         setLoggedIn(true)
         setCurrentUser(data)
 
-        navigate("/movies", {replace: true})
-
-        handleTokenCheck(false)
+        handleTokenCheck(true, "/movies")
     }
 
     const handleLogOut = () => {
