@@ -9,18 +9,26 @@ export function useFormWithValidation() {
         const target = event.target;
         const {name, type, checked} = target;
         let {value} = target;
-        let validationMessage = target.validationMessage;
 
-        if (type === "email" && validationMessage === "" && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-            validationMessage = "Адрес электронной почты некорректен"
-        }
+        if (type === "email") {
+            let validationMessage = ""
+            if (value === "") {
+                validationMessage = "Заполните это поле"
+            } else {
+                validationMessage =
+                    /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value) ?
+                        "" :
+                        "Адрес электронной почты некорректен"
 
-        if (type === "checkbox") {
+            }
+
+            event.target.setCustomValidity(validationMessage)
+        } else if (type === "checkbox") {
             value = checked
         }
 
         setFormValues({...formValues, [name]: value});
-        setFormErrors({...formErrors, [name]: validationMessage});
+        setFormErrors({...formErrors, [name]: event.target.validationMessage});
         setIsValid(target.closest("form").checkValidity());
     };
 
