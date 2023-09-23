@@ -1,0 +1,98 @@
+.message {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 2;
+    visibility: hidden;
+    opacity: 0;
+    transition: .5s linear;
+}
+
+.message_opened {
+    visibility: visible;
+    opacity: 1;
+}
+
+.message__container {
+    width: 430px;
+    height: 330px;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    padding: 33px 36px 37px;
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+}
+
+.message__close {
+    background-image: url("../../images/close.svg");
+    background-repeat: no-repeat;
+    position: absolute;
+    height: 32px;
+    width: 32px;
+    top: -40px;
+    right: -40px;
+    background-color: transparent;
+    background-size: contain;
+    background-position: right;
+    margin: 0;
+    border: none;
+    cursor: pointer;
+}
+
+.message__close:hover {
+    opacity: .6;
+}
+
+.message__failure-image {
+    background-image: url("../../images/fail.svg");
+    height: 100px;
+    width: 100px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 20px auto 30px
+}
+
+.message__success-image {
+    background-image: url("../../images/ok.svg");
+    height: 100px;
+    width: 100px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 20px auto 30px
+}
+
+.message__failure-text {
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 23px;
+    text-align: center;
+    width: 358px;
+}
+
+@media screen and (max-width: 700px) {
+    .message__container {
+        width: 282px;
+        padding: 25px 22px 25px;
+        height: 322px;
+    }
+
+    .message__close {
+        height: 20px;
+        width: 20px;
+        top: -36px;
+        right: 0;
+    }
+}

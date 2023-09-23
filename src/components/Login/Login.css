@@ -16,6 +16,9 @@
     flex-direction: column;
     row-gap: 40px;
 }
+.login__form{
+    width: 100%;
+}
 
 .login__logo {
     background-image: url("../../images/logo.svg");
@@ -41,6 +44,7 @@
 
 .login__form__container {
     margin: 36px 0 193px;
+    width:100%;
 }
 
 .login__form-label {
@@ -54,7 +58,7 @@
 
 .login__form-input {
     font-family: 'Inter', Arial, sans-serif;
-    margin: 0 0 19px 0;
+    margin: 0 0 1px 0;
     width: 100%;
     height: 28px;
     border: none;
@@ -111,6 +115,21 @@
     opacity: 0.8;
 }
 
+.login__button:disabled{
+    background-color: #F8F8F8;
+    color: #ccc;
+}
+.login__form-input-error{
+    color: red;
+}
+.login__form__errors{
+    color: red;
+    height: 16px;
+    margin: 0 0 2px 0;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 10px;
+    line-height: normal;
+}
 
 @media screen and (max-width: 600px) {
     .login {

@@ -46,6 +46,7 @@
     position: relative;
     padding: 0;
     top: 184px;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 600px) {

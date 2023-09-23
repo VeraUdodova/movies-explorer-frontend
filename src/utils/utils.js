@@ -1,3 +1,6 @@
 export function catchError(err) {
-    console.log(err)
+    return err.then(function (data) {
+        console.log(`${data.statusCode} ${data.error}: ${data.message}`);
+        return data;
+    })
 }

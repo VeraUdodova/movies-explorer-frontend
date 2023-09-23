@@ -1,31 +1,75 @@
-import {useContext} from "react";
+import {useEffect, useState} from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
-import {CurrentUserContext} from "../../contexts/CurrentUserContext.js";
 import "./MoviesCardList.css";
+import {FILMS_NOT_FOUND, MORE} from "../../utils/texts";
 
 function MoviesCardList(props) {
-    const currentUser = useContext(CurrentUserContext);
+    const [buttonVisible, setButtonVisible] = useState(false);
+    const [notFoundText, setNotFoundText] = useState("");
+
+    const {
+        setCurrentPage,
+        currentPage,
+        visibleMovies,
+        savedMoviesIds,
+        savedMoviesFlag,
+        onMovieLike,
+        maxPage,
+        setReloadMovies,
+        searchQuery,
+        reloadMovies
+    } = props;
+
+    const nextPage = function () {
+        if (!savedMoviesFlag) {
+            setCurrentPage(currentPage + 1)
+        }
+        setReloadMovies(true)
+    }
+
+    useEffect(() => {
+        if (!savedMoviesFlag) {
+            setButtonVisible(!savedMoviesFlag && currentPage < maxPage)
+        }
+    }, [currentPage, maxPage])
+
+    useEffect(() => {
+        if (!savedMoviesFlag) {
+            setCurrentPage(1)
+        } else {
+            setReloadMovies(true)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (reloadMovies === false) {
+            setNotFoundText(searchQuery === "" ? "" : FILMS_NOT_FOUND)
+        }
+    }, [reloadMovies])
 
     return (
         <section className="movies">
             {
-                props.movies ?
-                    props.movies.map(movie => !props.savedMovies || (props.savedMovies && movie.ownerId === currentUser._id) ? (
-                        <MoviesCard
-                            key={movie._id}
-                            movie={movie}
-                            ownerId={currentUser.ownerId}
-                            savedMovies={props.savedMovies}
-                            onMovieLike={props.onMovieLike}
-                            onMovieDelete={props.onMovieDelete}
-                        />
-                    ) : "")
+                visibleMovies.length === 0 ?
+                    <div className="movies__zero">{notFoundText}</div>
                     :
-                    <div className="movies__zero">
-                        Фильмы отсутствуют
-                    </div>
+                    <>
+                        {visibleMovies.map(movie => (
+                            <MoviesCard
+                                key={movie.id}
+                                movie={movie}
+                                savedMoviesIds={savedMoviesIds}
+                                savedMoviesFlag={savedMoviesFlag}
+                                onMovieLike={onMovieLike}
+                            />))}
+                        {
+                            buttonVisible ?
+                                <button className="movies__more" onClick={nextPage}>{MORE}</button>
+                                :
+                                <></>
+                        }
+                    </>
             }
-            <button className="movies__more">Еще</button>
         </section>
     )
 }
